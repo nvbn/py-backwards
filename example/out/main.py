@@ -1,6 +1,7 @@
 
 from typing import Optional
 
+
 class Example():
 
     def fn(self, x, y):

@@ -1,5 +1,6 @@
 from typed_ast import ast3 as ast
 from astunparse import unparse
+from autopep8 import fix_code
 
 
 class FormattedValuesTransformer(ast.NodeTransformer):
@@ -48,4 +49,4 @@ def transform(code):
     tree = ast.parse(code)
     for transformer in transformers:
         transformer().visit(tree)
-    return unparse(tree)
+    return fix_code(unparse(tree))
