@@ -1,8 +1,11 @@
 import pytest
+
 try:
     from pathlib import Path
 except ImportError:
     from pathlib2 import Path
+
+from py_backwards.exceptions import InvalidInputOutput, InputDoesntExists
 from py_backwards import files
 
 
@@ -14,12 +17,12 @@ class TestGetInputPath(object):
         return exists_mock
 
     def test_dir_to_file(self):
-        with pytest.raises(files.InvalidInputOutput):
+        with pytest.raises(InvalidInputOutput):
             list(files.get_input_output_paths('src/', 'out.py'))
 
     def test_non_exists_input(self, exists):
         exists.return_value = False
-        with pytest.raises(files.InputDoesntExists):
+        with pytest.raises(InputDoesntExists):
             list(files.get_input_output_paths('src/', 'out/'))
 
     def test_file_to_dir(self):

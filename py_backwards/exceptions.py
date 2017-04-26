@@ -21,3 +21,11 @@ class TransformationError(Exception):
         self.filename = filename
         self.transformer = transformer
         self.traceback = traceback
+
+
+class InvalidInputOutput(Exception):
+    """Raises when input is a directory, but output is a file."""
+
+
+class InputDoesntExists(Exception):
+    """Raises when input doesn't exists."""

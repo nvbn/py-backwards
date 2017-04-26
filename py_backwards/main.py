@@ -4,11 +4,8 @@ init()
 
 from argparse import ArgumentParser
 import sys
-from .files import InputDoesntExists, InvalidInputOutput
 from .compiler import compile_files
-from .transformers import TransformationError
-from .exceptions import CompilationError
-from . import const, messages
+from . import const, messages, exceptions
 
 
 def main() -> int:
@@ -28,16 +25,16 @@ def main() -> int:
     try:
         result = compile_files(args.input, args.output,
                                const.TARGETS[args.target])
-    except CompilationError as e:
+    except exceptions.CompilationError as e:
         print(messages.syntax_error(e), file=sys.stderr)
         return 1
-    except TransformationError as e:
+    except exceptions.TransformationError as e:
         print(messages.transformation_error(e), file=sys.stderr)
         return 1
-    except InputDoesntExists:
+    except exceptions.InputDoesntExists:
         print(messages.input_doesnt_exists(args.input), file=sys.stderr)
         return 1
-    except InvalidInputOutput:
+    except exceptions.InvalidInputOutput:
         print(messages.invalid_output(args.input, args.output),
               file=sys.stderr)
         return 1

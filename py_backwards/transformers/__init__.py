@@ -3,7 +3,6 @@ from typing import List, Type
 from typed_ast import ast3 as ast
 from typed_astunparse import unparse
 from autopep8 import fix_code
-from ..exceptions import TransformationError
 from ..types import CompilationTarget
 from .dict_unpacking import DictUnpackingTransformer
 from .formatted_values import FormattedValuesTransformer
@@ -21,6 +20,8 @@ transformers = [FormattedValuesTransformer,
 
 def transform(path: str, code: str, target: CompilationTarget) -> str:
     """Applies all transformation for passed target."""
+    from ..exceptions import TransformationError
+
     for transformer in transformers:
         tree = ast.parse(code, path)
         if transformer.target >= target:

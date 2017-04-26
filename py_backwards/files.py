@@ -6,14 +6,7 @@ except ImportError:
     from pathlib2 import Path  # type: ignore
 
 from .types import InputOutput
-
-
-class InvalidInputOutput(Exception):
-    """Raises when input is a directory, but output is a file."""
-
-
-class InputDoesntExists(Exception):
-    """Raises when input doesn't exists."""
+from .exceptions import InvalidInputOutput, InputDoesntExists
 
 
 def get_input_output_paths(input_: str, output: str) -> Iterable[InputOutput]:
