@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-VERSION = '0.1'
+VERSION = '0.2'
 
 install_requires = ['typed-astunparse', 'astunparse', 'typed-ast',
                     'autopep8', 'colorama']
