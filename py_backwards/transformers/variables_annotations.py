@@ -4,6 +4,13 @@ from .base import BaseTransformer
 
 
 class VariablesAnnotationsTransformer(BaseTransformer):
+    """Compiles:
+        a: int = 10
+        b: int
+    To:
+        a = 10
+    
+    """
     target = (3, 5)
 
     def visit_AnnAssign(self, node: ast.AnnAssign) -> Optional[ast.Assign]:

@@ -3,6 +3,12 @@ from .base import BaseTransformer
 
 
 class FormattedValuesTransformer(BaseTransformer):
+    """Compiles:
+        f"hello {x}"
+    To
+        ''.join(['hello ', '{}'.format(x)])
+    
+    """
     target = (3, 5)
 
     def visit_FormattedValue(self, node: ast.FormattedValue) -> ast.Call:

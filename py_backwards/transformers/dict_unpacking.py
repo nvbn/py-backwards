@@ -15,6 +15,15 @@ Pair = Tuple[Optional[ast.expr], ast.expr]
 
 
 class DictUnpackingTransformer(BaseTransformer):
+    """Compiles:
+    
+        {1: 1, **dict_a}
+        
+    To:
+    
+        _py_backwards_merge_dicts([{1: 1}], dict_a})
+    
+    """
     target = (3, 4)
     shim = [_py_backwards_merge_dicts]
 

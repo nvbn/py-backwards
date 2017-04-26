@@ -1,4 +1,4 @@
-from typing import List, Union, Iterable, List
+from typing import Union, Iterable, List
 from typed_ast import ast3 as ast
 from .base import BaseTransformer
 
@@ -7,6 +7,14 @@ ListEntry = Union[ast.Call, ast.List]
 
 
 class StarredUnpackingTransformer(BaseTransformer):
+    """Compiles:
+        [2, *range(10), 1]
+        print(*range(1), *range(3))
+    To:
+        [2] + list(range(10)) + [1]
+        print(*(list(range(1)) + list(range(3))))
+        
+    """
     target = (3, 4)
 
     def _has_starred(self, xs: List[ast.expr]) -> bool:

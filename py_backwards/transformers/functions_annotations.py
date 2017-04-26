@@ -3,6 +3,14 @@ from .base import BaseTransformer
 
 
 class FunctionsAnnotationsTransformer(BaseTransformer):
+    """Compiles:
+        def fn(x: int) -> int:
+            pass
+    To:
+        def fn(x):
+            pass
+            
+    """
     target = (2, 7)
 
     def visit_arg(self, node: ast.arg) -> ast.arg:
