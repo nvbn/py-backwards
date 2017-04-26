@@ -25,6 +25,75 @@ Target 2.7:
 * [super without arguments](https://www.python.org/dev/peps/pep-3135/)
 * classes without base like `class A: pass`
 
+For example, if you have some python 3.6 code, like:
+
+```python
+def returning_range(x: int):
+    yield from range(x)
+    return x
+
+
+def x_printer(x):
+    val: int
+    val = yield from returning_range(x)
+    print(f'val {val}')
+
+
+def formatter(x: int) -> dict:
+    items: list = [*x_printer(x), x]
+    print(*items, *items)
+    return {'items': items}
+
+
+result = {'x': 10, **formatter(10)}
+print(result)
+
+
+class NumberManager:
+    def ten(self):
+        return 10
+
+    @classmethod
+    def eleven(cls):
+        return 11
+
+
+class ImportantNumberManager(NumberManager):
+    def ten(self):
+        return super().ten()
+
+    @classmethod
+    def eleven(cls):
+        return super().eleven()
+
+
+print(ImportantNumberManager().ten())
+print(ImportantNumberManager.eleven())
+```
+
+You can compile it for python 2.7 with:
+
+```bash
+➜ py-backwards -i input.py -o output.py -t 2.7
+```
+
+Got some [ugly code](https://gist.github.com/nvbn/51b1536dc05bddc09439f848461cef6a) and ensure that it works:
+
+```bash
+➜ python3.6 ex_in.py
+val 10
+0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
+{'x': 10, 'items': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+10
+11
+➜ python2 out.py                           
+val 10
+0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
+{'x': 10, 'items': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+10
+11
+```
+
 ## Usage
 
 Installation:
