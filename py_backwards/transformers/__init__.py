@@ -13,6 +13,7 @@ from .yield_from import YieldFromTransformer
 from .return_from_generator import ReturnFromGeneratorTransformer
 from .python2_future import Python2FutureTransformer
 from .super_without_arguments import SuperWithoutArgumentsTransformer
+from .class_without_bases import ClassWithoutBasesTransformer
 from .base import BaseTransformer
 
 transformers = [DictUnpackingTransformer,
@@ -23,7 +24,8 @@ transformers = [DictUnpackingTransformer,
                 YieldFromTransformer,
                 ReturnFromGeneratorTransformer,
                 Python2FutureTransformer,
-                SuperWithoutArgumentsTransformer]  # type: List[Type[BaseTransformer]]
+                SuperWithoutArgumentsTransformer,
+                ClassWithoutBasesTransformer]  # type: List[Type[BaseTransformer]]
 
 
 def transform(path: str, code: str, target: CompilationTarget) -> str:
