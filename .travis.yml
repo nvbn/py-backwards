@@ -8,7 +8,7 @@ before_install:
   - pip install -U pip
 install:
   - pip install -r requirements.txt
-  - pip install .
+  - pip install astunparse typed-ast
   - python setup.py develop
 script:
   - py.test
