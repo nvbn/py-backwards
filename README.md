@@ -32,6 +32,7 @@ py-backwards -i src -o compiled -t 2.7
 Setup:
 
 ```bash
+pip install .
 python setup.py develop
 pip install -r requirements.txt
 ```
