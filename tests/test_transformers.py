@@ -61,6 +61,17 @@ def test_variables_annotations_transformer(before, after):
      'print(*list(range(5, 10)))'),
 ])
 def test_starred_unpacking_transformer(before, after):
-    print(_transform(transformers.StarredUnpackingTransformer, before), '!!!!')
     assert _transform(transformers.StarredUnpackingTransformer, before) \
            == after
+
+
+@pytest.mark.parametrize('before, after', [
+    ('{1: 2, **{3: 4}}',
+     '__py_backwards_merge_dicts([{1: 2}, dict({3: 4})])'),
+    ('{**x}', '__py_backwards_merge_dicts([dict(x)])'),
+    ('{1: 2, **a, 3: 4, **b, 5: 6}',
+     '__py_backwards_merge_dicts([{1: 2}, dict(a), {3: 4}, dict(b), {5: 6}])')
+])
+def test_dict_unpacking_transformer(before, after):
+    assert _transform(transformers.DictUnpackingTransformer, before) \
+           == (transformers.merge_dicts_fn + after).strip()
