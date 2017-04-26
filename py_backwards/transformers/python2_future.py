@@ -3,7 +3,7 @@ from typed_ast import ast3 as ast
 from .base import BaseTransformer
 
 
-class Python2Future(BaseTransformer):
+class Python2FutureTransformer(BaseTransformer):
     """Prepends module with:
         from __future__ import absolute_import
         from __future__ import division
