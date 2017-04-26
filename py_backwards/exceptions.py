@@ -16,10 +16,13 @@ class CompilationError(Exception):
 class TransformationError(Exception):
     """Raises when transformation failed."""
 
-    def __init__(self, filename: str, transformer: Type[BaseTransformer],
+    def __init__(self, filename: str,
+                 transformer: Type[BaseTransformer],
+                 ast: str,
                  traceback: str) -> None:
         self.filename = filename
         self.transformer = transformer
+        self.ast = ast
         self.traceback = traceback
 
 

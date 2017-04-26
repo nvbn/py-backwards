@@ -58,12 +58,14 @@ def syntax_error(e: CompilationError) -> str:
 
 
 def transformation_error(e: TransformationError) -> str:
-    return ('{red}Transformation error in "{e.filename}", '
+    return ('{red}{bright}Transformation error in "{e.filename}", '
             'transformer "{e.transformer.__name__}" '
-            'failed with:{reset}\n{e.traceback}').format(
+            'failed with:{reset}\n{e.traceback}\n'
+            '{bright}AST:{reset}\n{e.ast}').format(
         red=Fore.RED,
         e=e,
-        reset=Style.RESET_ALL)
+        reset=Style.RESET_ALL,
+        bright=Style.BRIGHT)
 
 
 def input_doesnt_exists(input_: str) -> str:
