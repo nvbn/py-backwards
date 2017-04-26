@@ -29,9 +29,18 @@ def test_formatted_values_transformer(before, after):
 
 
 @pytest.mark.parametrize('before, after', [
-    ('a: int = 10', 'a = 10'),
-    ('a: int', ''),
+    ('def fn(x: T) -> List[T]:\n    return [x]', 'def fn(x):\n    return [x]'),
     ('def fn(x: int) -> float:\n    return 1.5', 'def fn(x):\n    return 1.5'),
 ])
-def test_annotations_transformer(before, after):
-    assert _transform(transformers.AnnotationsTransformer, before) == after
+def test_functions_annotations_transformer(before, after):
+    assert _transform(transformers.FunctionsAnnotationsTransformer, before) \
+           == after
+
+
+@pytest.mark.parametrize('before, after', [
+    ('a: int = 10', 'a = 10'),
+    ('a: int', ''),
+])
+def test_variables_annotations_transformer(before, after):
+    assert _transform(transformers.VariablesAnnotationsTransformer, before) \
+           == after

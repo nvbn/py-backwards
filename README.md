@@ -1,11 +1,14 @@
 # Py-backwards
 
-Translates python code for older versions.
+Python to python compiler that allows you to use Python 3.6 features in older versions.
 
 Supported features:
 
 * formatted strings like `f'hi {x}'`;
-* type annotations like `x: int = 10`, `def fn(a: int) -> str` and `x: int`.
+* functions annotations like `def fn(a: int) -> str`;
+* variables annotations like `x: int = 10` and `x: int`.
+
+Requires Python 3.3+.
 
 ## Usage
 
@@ -18,7 +21,7 @@ pip install py-backwards
 Usage:
 
 ```bash
-py-backwards -i src -o compiled
+py-backwards -i src -o compiled -t 2.7
 ```
 
 ## Development

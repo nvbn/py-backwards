@@ -4,6 +4,8 @@ from autopep8 import fix_code
 
 
 class FormattedValuesTransformer(ast.NodeTransformer):
+    target = (3, 5)
+
     def visit_FormattedValue(self, node):
         if node.format_spec:
             template = ''.join(['{:', node.format_spec.s, '}'])
@@ -24,7 +26,9 @@ class FormattedValuesTransformer(ast.NodeTransformer):
         return self.generic_visit(join_call)
 
 
-class AnnotationsTransformer(ast.NodeTransformer):
+class FunctionsAnnotationsTransformer(ast.NodeTransformer):
+    target = (2, 7)
+
     def visit_arg(self, node):
         node.annotation = None
         return self.generic_visit(node)
@@ -32,6 +36,10 @@ class AnnotationsTransformer(ast.NodeTransformer):
     def visit_FunctionDef(self, node):
         node.returns = None
         return self.generic_visit(node)
+
+
+class VariablesAnnotationsTransformer(ast.NodeTransformer):
+    target = (3, 5)
 
     def visit_AnnAssign(self, node):
         if node.value is None:
@@ -42,11 +50,13 @@ class AnnotationsTransformer(ast.NodeTransformer):
 
 
 transformers = [FormattedValuesTransformer,
-                AnnotationsTransformer]
+                FunctionsAnnotationsTransformer,
+                VariablesAnnotationsTransformer]
 
 
-def transform(code):
+def transform(code, target):
     tree = ast.parse(code)
     for transformer in transformers:
-        transformer().visit(tree)
+        if transformer.target >= target:
+            transformer().visit(tree)
     return fix_code(unparse(tree))
