@@ -1,25 +1,11 @@
-from collections import namedtuple
 from time import time
-from .files import get_input_output_paths
+from .files import get_input_output_paths, InputOutput
 from .transformers import transform
+from .types import CompilationTarget, CompilationResult
+from .exceptions import CompilationError
 
 
-class CompilationError(Exception):
-    """Raises when compilation failed because fo syntax error."""
-
-    def __init__(self, filename, code, lineno, offset):
-        self.filename = filename
-        self.code = code
-        self.lineno = lineno
-        self.offset = offset
-
-
-CompilationResult = namedtuple('CompilationResult', ('files',
-                                                     'time',
-                                                     'target'))
-
-
-def _compile_file(paths, target):
+def _compile_file(paths: InputOutput, target: CompilationTarget) -> None:
     """Compiles a single file."""
     with paths.input.open() as f:
         code = f.read()
@@ -29,7 +15,8 @@ def _compile_file(paths, target):
                                 code,
                                 target)
     except SyntaxError as e:
-        raise CompilationError(e.filename, code, e.lineno, e.offset)
+        raise CompilationError(paths.input.as_posix(),
+                               code, e.lineno, e.offset)
 
     try:
         paths.output.parent.mkdir(parents=True)
@@ -40,7 +27,8 @@ def _compile_file(paths, target):
         f.write(transformed)
 
 
-def compile_files(input_, output, target):
+def compile_files(input_: str, output: str,
+                  target: CompilationTarget) -> CompilationResult:
     """Compiles all files from input_ to output."""
     start = time()
     count = 0

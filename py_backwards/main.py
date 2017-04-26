@@ -5,12 +5,13 @@ init()
 from argparse import ArgumentParser
 import sys
 from .files import InputDoesntExists, InvalidInputOutput
-from .compiler import compile_files, CompilationError
+from .compiler import compile_files
 from .transformers import TransformationError
+from .exceptions import CompilationError
 from . import const, messages
 
 
-def main():
+def main() -> int:
     parser = ArgumentParser(
         'py-backwards',
         description='Python to python compiler that allows you to use some '
@@ -45,3 +46,4 @@ def main():
         return 1
 
     print(messages.compilation_result(result))
+    return 0

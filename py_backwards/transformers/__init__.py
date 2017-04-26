@@ -1,28 +1,26 @@
 from traceback import format_exc
+from typing import List, Type
 from typed_ast import ast3 as ast
 from typed_astunparse import unparse
 from autopep8 import fix_code
+from ..exceptions import TransformationError
+from ..types import CompilationTarget
 from .dict_unpacking import DictUnpackingTransformer
 from .formatted_values import FormattedValuesTransformer
 from .functions_annotations import FunctionsAnnotationsTransformer
 from .starred_unpacking import StarredUnpackingTransformer
 from .variables_annotations import VariablesAnnotationsTransformer
+from .base import BaseTransformer
 
 transformers = [FormattedValuesTransformer,
                 FunctionsAnnotationsTransformer,
                 VariablesAnnotationsTransformer,
                 StarredUnpackingTransformer,
-                DictUnpackingTransformer]
+                DictUnpackingTransformer]  # type: List[Type[BaseTransformer]]
 
 
-class TransformationError(Exception):
-    def __init__(self, filename, transformer, traceback):
-        self.filename = filename
-        self.transformer = transformer
-        self.traceback = traceback
-
-
-def transform(path, code, target):
+def transform(path: str, code: str, target: CompilationTarget) -> str:
+    """Applies all transformation for passed target."""
     for transformer in transformers:
         tree = ast.parse(code, path)
         if transformer.target >= target:

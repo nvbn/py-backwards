@@ -1,11 +1,11 @@
-from collections import namedtuple
+from typing import Iterable
 
 try:
     from pathlib import Path
 except ImportError:
-    from pathlib2 import Path
+    from pathlib2 import Path  # type: ignore
 
-InputOutput = namedtuple('InputOutput', ('input', 'output'))
+from .types import InputOutput
 
 
 class InvalidInputOutput(Exception):
@@ -16,7 +16,7 @@ class InputDoesntExists(Exception):
     """Raises when input doesn't exists."""
 
 
-def get_input_output_paths(input_, output):
+def get_input_output_paths(input_: str, output: str) -> Iterable[InputOutput]:
     """Get input/output paths pairs."""
     if output.endswith('.py') and not input_.endswith('.py'):
         raise InvalidInputOutput

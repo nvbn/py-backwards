@@ -1,3 +1,4 @@
+from typing import Optional
 from typed_ast import ast3 as ast
 from .base import BaseTransformer
 
@@ -5,9 +6,9 @@ from .base import BaseTransformer
 class VariablesAnnotationsTransformer(BaseTransformer):
     target = (3, 5)
 
-    def visit_AnnAssign(self, node):
+    def visit_AnnAssign(self, node: ast.AnnAssign) -> Optional[ast.Assign]:
         if node.value is None:
-            return
+            return None
 
-        return self.generic_visit(ast.Assign(targets=[node.target],
+        return self.generic_visit(ast.Assign(targets=[node.target],  # type: ignore
                                              value=node.value))

@@ -1,15 +1,20 @@
+from typing import Iterable
 from colorama import Fore, Style
+from .exceptions import CompilationError, TransformationError
+from .types import CompilationResult
 from . import const
 
 
-def _format_line(line, n, padding):
+def _format_line(line: str, n: int, padding: int) -> str:
+    """Format single line of code."""
     return '  {dim}{n}{reset}: {line}'.format(dim=Style.DIM,
                                               n=str(n + 1).zfill(padding),
                                               line=line,
                                               reset=Style.RESET_ALL)
 
 
-def _get_lines_with_highlighted_error(e):
+def _get_lines_with_highlighted_error(e: CompilationError) -> Iterable[str]:
+    """Format code with highlighted syntax error."""
     error_line = e.lineno - 1
     lines = e.code.split('\n')
     padding = len(str(len(lines)))
@@ -40,7 +45,7 @@ def _get_lines_with_highlighted_error(e):
         yield _format_line(lines[n], n, padding)
 
 
-def syntax_error(e):
+def syntax_error(e: CompilationError) -> str:
     lines = _get_lines_with_highlighted_error(e)
 
     return ('{red}Syntax error in "{e.filename}", '
@@ -52,7 +57,7 @@ def syntax_error(e):
         lines='\n'.join(lines))
 
 
-def transformation_error(e):
+def transformation_error(e: TransformationError) -> str:
     return ('{red}Transformation error in "{e.filename}", '
             'transformer "{e.transformer.__name__}" '
             'failed with:{reset}\n{e.traceback}').format(
@@ -61,23 +66,23 @@ def transformation_error(e):
         reset=Style.RESET_ALL)
 
 
-def input_doesnt_exists(input_):
+def input_doesnt_exists(input_: str) -> str:
     return '{red}Input path "{path}" doesn\'t exists{reset}'.format(
         red=Fore.RED, path=input_, reset=Style.RESET_ALL)
 
 
-def invalid_output(input_, output):
+def invalid_output(input_: str, output: str) -> str:
     return ('{red}Invalid output, when input "{input}" is a directory,'
             'output "{output}" should be a directory too{reset}').format(
         red=Fore.RED, input=input_, output=output, reset=Style.RESET_ALL)
 
 
-def permission_error(output):
+def permission_error(output: str) -> str:
     return '{red}Permission denied to "{output}"{reset}'.format(
         red=Fore.RED, output=output, reset=Style.RESET_ALL)
 
 
-def compilation_result(result):
+def compilation_result(result: CompilationResult) -> str:
     return ('{bright}Compilation succeed{reset}:\n'
             '  target: {bright}{target}{reset}\n'
             '  files: {bright}{files}{reset}\n'
