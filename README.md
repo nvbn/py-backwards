@@ -1,4 +1,4 @@
-# Py-backwards
+# Py-backwards [![Build Status](https://travis-ci.org/nvbn/py-backwards.svg?branch=master)](https://travis-ci.org/nvbn/py-backwards)
 
 Python to python compiler that allows you to use some Python 3.6 features in older versions.
 
