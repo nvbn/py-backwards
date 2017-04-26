@@ -4,9 +4,11 @@ Python to python compiler that allows you to use Python 3.6 features in older ve
 
 Supported features:
 
-* formatted strings like `f'hi {x}'`;
-* functions annotations like `def fn(a: int) -> str`;
-* variables annotations like `x: int = 10` and `x: int`.
+* [formatted string literals](https://docs.python.org/3/whatsnew/3.6.html#pep-498-formatted-string-literals) like `f'hi {x}'`;
+* [functions annotations](https://www.python.org/dev/peps/pep-3107/) like `def fn(a: int) -> str`;
+* [variables annotations](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep526) like `x: int = 10` and `x: int`;
+* [underscores in numeric literals](https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals) like `1_000_000`;
+* [starred unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `[*range(1, 5), *range(10, 15)]` and `print(*[1, 2], 3, *[4, 5])`;
 
 Requires Python 3.3+.
 

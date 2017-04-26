@@ -44,3 +44,23 @@ def test_functions_annotations_transformer(before, after):
 def test_variables_annotations_transformer(before, after):
     assert _transform(transformers.VariablesAnnotationsTransformer, before) \
            == after
+
+
+@pytest.mark.parametrize('before, after', [
+    ('[1, 2, 3]', '[1, 2, 3]'),
+    ('[1, 2, *range(5, 10), 3, 4]',
+     '(([1, 2] + list(range(5, 10))) + [3, 4])'),
+    ('[*range(5), *range(5, 10)]', '(list(range(5)) + list(range(5, 10)))'),
+    ('[*range(5, 10)]', 'list(range(5, 10))'),
+    ('print(1, 2, 3)', 'print(1, 2, 3)'),
+    ('print(1, 2, *range(5, 10), 3, 4)',
+     'print(*(([1, 2] + list(range(5, 10))) + [3, 4]))'),
+    ('print(*range(5), *range(5, 10))',
+     'print(*(list(range(5)) + list(range(5, 10))))'),
+    ('print(*range(5, 10))',
+     'print(*list(range(5, 10)))'),
+])
+def test_starred_unpacking_transformer(before, after):
+    print(_transform(transformers.StarredUnpackingTransformer, before), '!!!!')
+    assert _transform(transformers.StarredUnpackingTransformer, before) \
+           == after
