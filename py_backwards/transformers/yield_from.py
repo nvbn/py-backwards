@@ -28,18 +28,9 @@ class YieldFromTransformer(BaseTransformer):
             id='_py_backwards_generator_exception_{}'.format(self._name_suffix))
 
         yield ast.Assign(targets=[generator],
-                         value=node.value)
-
-        yield ast.If(test=ast.UnaryOp(
-            op=ast.Not(),
-            operand=ast.Call(func=ast.Name(id='hasattr'), args=[
-                generator, ast.Str(s='__next__'),
-            ], keywords=[])), body=[
-            ast.Assign(targets=[generator],
-                       value=ast.Call(func=ast.Name(id='iter'),
-                                      args=[generator],
-                                      keywords=[])),
-        ], orelse=[])
+                         value=ast.Call(func=ast.Name(id='iter'),
+                                        args=[node.value],
+                                        keywords=[]))
 
         assign_to_targets = [
             ast.If(test=ast.Call(func=ast.Name(id='hasattr'), args=[
@@ -54,10 +45,8 @@ class YieldFromTransformer(BaseTransformer):
         yield ast.While(test=ast.NameConstant(value=True), body=[
             ast.Try(body=[
                 ast.Expr(value=ast.Yield(value=ast.Call(
-                    func=ast.Attribute(
-                        value=generator,
-                        attr='__next__'),
-                    args=[], keywords=[]))),
+                    func=ast.Name(id='next'),
+                    args=[generator], keywords=[]))),
             ], handlers=[
                 ast.ExceptHandler(
                     type=ast.Name(id='StopIteration'),
