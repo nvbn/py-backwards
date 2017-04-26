@@ -12,6 +12,7 @@ from .variables_annotations import VariablesAnnotationsTransformer
 from .yield_from import YieldFromTransformer
 from .return_from_generator import ReturnFromGeneratorTransformer
 from .python2_future import Python2FutureTransformer
+from .super_without_arguments import SuperWithoutArgumentsTransformer
 from .base import BaseTransformer
 
 transformers = [DictUnpackingTransformer,
@@ -21,7 +22,8 @@ transformers = [DictUnpackingTransformer,
                 VariablesAnnotationsTransformer,
                 YieldFromTransformer,
                 ReturnFromGeneratorTransformer,
-                Python2FutureTransformer]  # type: List[Type[BaseTransformer]]
+                Python2FutureTransformer,
+                SuperWithoutArgumentsTransformer]  # type: List[Type[BaseTransformer]]
 
 
 def transform(path: str, code: str, target: CompilationTarget) -> str:

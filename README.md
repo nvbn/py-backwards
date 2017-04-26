@@ -22,6 +22,7 @@ Target 3.2:
 Target 2.7:
 * [functions annotations](https://www.python.org/dev/peps/pep-3107/) like `def fn(a: int) -> str`
 * [imports from __future__](https://docs.python.org/3/howto/pyporting.html#prevent-compatibility-regressions)
+* [super without arguments](https://www.python.org/dev/peps/pep-3135/)
 
 ## Usage
 
