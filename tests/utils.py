@@ -1,5 +1,5 @@
 from typed_ast.ast3 import AST, iter_fields, parse
-from astunparse import unparse
+from typed_astunparse import unparse
 
 
 def dump(node, annotate_fields=True, include_attributes=False, indent='  '):
