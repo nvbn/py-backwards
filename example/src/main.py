@@ -10,3 +10,6 @@ class Example:
     def hey(self, x: Optional[str]) -> str:
         return f'hey {x}!'
 
+
+def asd():
+    pass

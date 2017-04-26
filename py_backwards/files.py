@@ -12,13 +12,17 @@ class InvalidInputOutput(Exception):
     """Raises when input is a directory, but output is a file."""
 
 
+class InputDoesntExists(Exception):
+    """Raises when input doesn't exists."""
+
+
 def get_input_output_paths(input_, output):
+    """Get input/output paths pairs."""
     if output.endswith('.py') and not input_.endswith('.py'):
-        raise InvalidInputOutput(
-            "Output should be directory when input is directory")
+        raise InvalidInputOutput
 
     if not Path(input_).exists():
-        raise InvalidInputOutput("Input doesn't exists")
+        raise InputDoesntExists
 
     if input_.endswith('.py'):
         if output.endswith('.py'):

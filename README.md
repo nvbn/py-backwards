@@ -1,6 +1,6 @@
 # Py-backwards
 
-Python to python compiler that allows you to use Python 3.6 features in older versions.
+Python to python compiler that allows you to use some Python 3.6 features in older versions.
 
 Supported features:
 

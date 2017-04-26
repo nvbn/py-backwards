@@ -1,27 +1,47 @@
+from colorama import init
+
+init()
+
 from argparse import ArgumentParser
-from .files import get_input_output_paths
-from .transformers import transform
-from . import const
+import sys
+from .files import InputDoesntExists, InvalidInputOutput
+from .compiler import compile_files, CompilationError
+from .transformers import TransformationError
+from . import const, messages
 
 
 def main():
-    parser = ArgumentParser('py-backwars')
-    parser.add_argument('-i', '--input', type=str, required=True)
-    parser.add_argument('-o', '--output', type=str, required=True)
+    parser = ArgumentParser(
+        'py-backwards',
+        description='Python to python compiler that allows you to use some '
+                    'Python 3.6 features in older versions.')
+    parser.add_argument('-i', '--input', type=str, required=True,
+                        help='input file or folder')
+    parser.add_argument('-o', '--output', type=str, required=True,
+                        help='output file or folder')
     parser.add_argument('-t', '--target', type=str,
-                        required=True, choices=const.TARGETS.keys())
+                        required=True, choices=const.TARGETS.keys(),
+                        help='target python version')
     args = parser.parse_args()
 
-    for paths in get_input_output_paths(args.input, args.output):
-        with paths.input.open() as f:
-            code = f.read()
+    try:
+        result = compile_files(args.input, args.output,
+                               const.TARGETS[args.target])
+    except CompilationError as e:
+        print(messages.syntax_error(e), file=sys.stderr)
+        return 1
+    except TransformationError as e:
+        print(messages.transformation_error(e), file=sys.stderr)
+        return 1
+    except InputDoesntExists:
+        print(messages.input_doesnt_exists(args.input), file=sys.stderr)
+        return 1
+    except InvalidInputOutput:
+        print(messages.invalid_output(args.input, args.output),
+              file=sys.stderr)
+        return 1
+    except PermissionError:
+        print(messages.permission_error(args.output), file=sys.stderr)
+        return 1
 
-        transformed = transform(code, const.TARGETS[args.target])
-
-        try:
-            paths.output.parent.mkdir(parents=True)
-        except FileExistsError:
-            pass
-
-        with paths.output.open('w') as f:
-            f.write(transformed)
+    print(messages.compilation_result(result))

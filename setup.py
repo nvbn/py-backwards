@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 VERSION = '0.1'
 
-install_requires = ['typed-ast', 'astunparse', 'autopep8']
+install_requires = ['typed-ast', 'typed-astunparse', 'autopep8', 'colorama']
 extras_require = {':python_version<"3.4"': ['pathlib2']}
 
 setup(name='py-backwards',

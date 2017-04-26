@@ -19,7 +19,7 @@ class TestGetInputPath(object):
 
     def test_non_exists_input(self, exists):
         exists.return_value = False
-        with pytest.raises(files.InvalidInputOutput):
+        with pytest.raises(files.InputDoesntExists):
             list(files.get_input_output_paths('src/', 'out/'))
 
     def test_file_to_dir(self):
