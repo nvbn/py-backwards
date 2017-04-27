@@ -4,7 +4,7 @@ Python to python compiler that allows you to use some Python 3.6 features in old
 
 Requires Python 3.3+ to run, can compile down to 2.7.
 
-## Supported features:
+## Supported features
 
 Target 3.5:
 * [formatted string literals](https://docs.python.org/3/whatsnew/3.6.html#pep-498-formatted-string-literals) like `f'hi {x}'`
@@ -80,13 +80,13 @@ You can compile it for python 2.7 with:
 Got some [ugly code](https://gist.github.com/nvbn/51b1536dc05bddc09439f848461cef6a) and ensure that it works:
 
 ```bash
-➜ python3.6 ex_in.py
+➜ python3.6 input.py
 val 10
 0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
 {'x': 10, 'items': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
 10
 11
-➜ python2 out.py                           
+➜ python2 output.py                           
 val 10
 0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
 {'x': 10, 'items': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
