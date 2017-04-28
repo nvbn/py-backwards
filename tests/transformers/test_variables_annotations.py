@@ -4,7 +4,7 @@ from ..utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
-    ('a: int = 10', 'a = 10'),
+    ('a: int = 10', 'a = 10 # type: int'),
     ('a: int', '')])
 def test_transform(before, after):
     assert transform(VariablesAnnotationsTransformer, before) == after

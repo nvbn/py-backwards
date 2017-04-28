@@ -9,13 +9,13 @@ class VariablesAnnotationsTransformer(BaseTransformer):
         b: int
     To:
         a = 10
-    
+
     """
     target = (3, 5)
 
     def visit_AnnAssign(self, node: ast.AnnAssign) -> Optional[ast.Assign]:
         if node.value is None:
             return None
-
         return self.generic_visit(ast.Assign(targets=[node.target],  # type: ignore
-                                             value=node.value))
+                                             value=node.value,
+                                             type_comment=node.annotation))
