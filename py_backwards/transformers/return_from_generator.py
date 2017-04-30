@@ -9,6 +9,7 @@ def return_from_generator(return_value):
     let(exc)
     exc = StopIteration()
     exc.value = return_value
+    raise exc
 
 
 class ReturnFromGeneratorTransformer(BaseTransformer):

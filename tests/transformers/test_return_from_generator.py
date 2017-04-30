@@ -11,9 +11,9 @@ def fn():
     ''', '''
 def fn():
     (yield 1)
-    _py_backwards_generator_return_0 = StopIteration()
-    _py_backwards_generator_return_0.value = 5
-    raise _py_backwards_generator_return_0
+    _py_backwards_exc_0 = StopIteration()
+    _py_backwards_exc_0.value = 5
+    raise _py_backwards_exc_0
     '''),
     ('''
 def fn():
@@ -24,13 +24,12 @@ def fn():
 def fn():
     if True:
         x = (yield from [1])
-    _py_backwards_generator_return_0 = StopIteration()
-    _py_backwards_generator_return_0.value = 5
-    raise _py_backwards_generator_return_0
+    _py_backwards_exc_0 = StopIteration()
+    _py_backwards_exc_0.value = 5
+    raise _py_backwards_exc_0
     ''')])
 def test_transform(before, after):
     code = transform(ReturnFromGeneratorTransformer, before)
-    print(code)
     assert code == after.strip()
 
 
