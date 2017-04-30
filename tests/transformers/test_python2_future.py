@@ -1,6 +1,6 @@
 import pytest
 from py_backwards.transformers.python2_future import Python2FutureTransformer
-from ..utils import transform, run
+from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [

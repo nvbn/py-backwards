@@ -1,6 +1,6 @@
 import pytest
 from py_backwards.transformers.yield_from import YieldFromTransformer
-from ..utils import transform, run
+from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [

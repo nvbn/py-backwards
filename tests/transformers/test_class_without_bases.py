@@ -1,6 +1,6 @@
 import pytest
 from py_backwards.transformers.class_without_bases import ClassWithoutBasesTransformer
-from ..utils import transform, run
+from .utils import transform
 
 
 @pytest.mark.parametrize('before, after', [

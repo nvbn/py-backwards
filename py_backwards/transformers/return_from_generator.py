@@ -1,6 +1,14 @@
 from typing import List, Tuple, Any
 from typed_ast import ast3 as ast
+from ..utils.snippet import snippet, let
 from .base import BaseTransformer
+
+
+@snippet
+def return_from_generator(return_value):
+    let(exc)
+    exc = StopIteration()
+    exc.value = return_value
 
 
 class ReturnFromGeneratorTransformer(BaseTransformer):
@@ -50,22 +58,8 @@ class ReturnFromGeneratorTransformer(BaseTransformer):
         index = parent.body.index(return_)
         parent.body.pop(index)
 
-        exception = ast.Name(id='_py_backwards_generator_return_{}'.format(
-            self._name_suffix))
-
-        raise_exception = ast.Raise(exc=exception, cause=None)
-        parent.body.insert(index, raise_exception)
-
-        set_value = ast.Assign(targets=[
-            ast.Attribute(value=exception, attr='value'),
-        ], value=return_.value)
-        parent.body.insert(index, set_value)
-
-        assign = ast.Assign(targets=[exception],
-                            value=ast.Call(func=ast.Name(id='StopIteration'),
-                                           args=[],
-                                           keywords=[]))
-        parent.body.insert(index, assign)
+        for line in return_from_generator.get_body(return_value=return_.value)[::-1]:
+            parent.body.insert(index, line)
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
         generator_returns = self._find_generator_returns(node)

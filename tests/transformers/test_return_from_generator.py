@@ -1,6 +1,6 @@
 import pytest
 from py_backwards.transformers.return_from_generator import ReturnFromGeneratorTransformer
-from ..utils import transform, run
+from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -30,6 +30,7 @@ def fn():
     ''')])
 def test_transform(before, after):
     code = transform(ReturnFromGeneratorTransformer, before)
+    print(code)
     assert code == after.strip()
 
 

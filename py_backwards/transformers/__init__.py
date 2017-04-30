@@ -35,7 +35,7 @@ def transform(path: str, code: str, target: CompilationTarget) -> str:
     for transformer in transformers:
         tree = ast.parse(code, path)
         if transformer.target >= target:
-            transformer().visit(tree)
+            tree = transformer.transform(tree)
         try:
             code = unparse(tree)
         except:

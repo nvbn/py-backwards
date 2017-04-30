@@ -1,6 +1,6 @@
 import pytest
 from py_backwards.transformers.functions_annotations import FunctionsAnnotationsTransformer
-from ..utils import transform, run
+from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
