@@ -1,6 +1,6 @@
 # Py-backwards [![Build Status](https://travis-ci.org/nvbn/py-backwards.svg?branch=master)](https://travis-ci.org/nvbn/py-backwards)
 
-Python to python compiler that allows you to use some Python 3.6 features in older versions.
+Python to python compiler that allows you to use some Python 3.6 features in older versions, you can try it in [online demo](https://py-backwards.herokuapp.com/).
 
 Requires Python 3.3+ to run, can compile down to 2.7.
 
