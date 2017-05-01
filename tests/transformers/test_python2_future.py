@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.python2_future import Python2FutureTransformer
-from ..utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -16,5 +15,5 @@ from __future__ import division
 from __future__ import print_function
 a = 1
     ''')])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     assert transform(Python2FutureTransformer, before) == after.strip()

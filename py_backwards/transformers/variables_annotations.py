@@ -1,9 +1,9 @@
 from typing import Optional
 from typed_ast import ast3 as ast
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
-class VariablesAnnotationsTransformer(BaseTransformer):
+class VariablesAnnotationsTransformer(BaseNodeTransformer):
     """Compiles:
         a: int = 10
         b: int

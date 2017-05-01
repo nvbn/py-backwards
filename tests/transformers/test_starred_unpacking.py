@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.starred_unpacking import StarredUnpackingTransformer
-from ..utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -17,7 +16,7 @@ from ..utils import transform, run
     ('print(*range(5, 10))',
      'print(*list(range(5, 10)))'),
 ])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     assert transform(StarredUnpackingTransformer, before) == after
 
 
@@ -34,5 +33,5 @@ def test_transform(before, after):
     ('to_tuple = lambda *xs: xs; to_tuple(*range(5, 10))',
      (5, 6, 7, 8, 9)),
 ])
-def test_run(code, result):
-    assert run(StarredUnpackingTransformer, code) == result
+def test_run(run_transformed, code, result):
+    assert run_transformed(StarredUnpackingTransformer, code) == result

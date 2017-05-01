@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.class_without_bases import ClassWithoutBasesTransformer
-from ..utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -18,5 +17,5 @@ class A():
 class A(object):
     pass
     ''')])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     assert transform(ClassWithoutBasesTransformer, before) == after.strip()

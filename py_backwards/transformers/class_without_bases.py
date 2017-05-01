@@ -1,8 +1,8 @@
 from typed_ast import ast3 as ast
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
-class ClassWithoutBasesTransformer(BaseTransformer):
+class ClassWithoutBasesTransformer(BaseNodeTransformer):
     """Compiles:
         class A:
             pass

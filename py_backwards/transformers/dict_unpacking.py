@@ -1,20 +1,23 @@
 from typing import Union, Iterable, Optional, List, Tuple
 from typed_ast import ast3 as ast
-from .base import BaseTransformer
+from ..utils.snippet import snippet
+from .base import BaseNodeTransformer
 
 
-def _py_backwards_merge_dicts(dicts):
-    result = {}
-    for dict_ in dicts:
-        result.update(dict_)
-    return result
+@snippet
+def merge_dicts():
+    def _py_backwards_merge_dicts(dicts):
+        result = {}
+        for dict_ in dicts:
+            result.update(dict_)
+        return result
 
 
 Splitted = List[Union[List[Tuple[ast.expr, ast.expr]], ast.expr]]
 Pair = Tuple[Optional[ast.expr], ast.expr]
 
 
-class DictUnpackingTransformer(BaseTransformer):
+class DictUnpackingTransformer(BaseNodeTransformer):
     """Compiles:
     
         {1: 1, **dict_a}
@@ -25,7 +28,6 @@ class DictUnpackingTransformer(BaseTransformer):
     
     """
     target = (3, 4)
-    shim = [_py_backwards_merge_dicts]
 
     def _split_by_None(self, pairs: Iterable[Pair]) -> Splitted:
         """Splits pairs to lists separated by dict unpacking statements."""
@@ -60,6 +62,10 @@ class DictUnpackingTransformer(BaseTransformer):
             func=ast.Name(id='_py_backwards_merge_dicts'),
             args=[ast.List(elts=xs)],
             keywords=[])
+
+    def visit_Module(self, node: ast.Module) -> ast.Module:
+        node.body = merge_dicts.get_body() + node.body  # type: ignore
+        return self.generic_visit(node)  # type: ignore
 
     def visit_Dict(self, node: ast.Dict) -> Union[ast.Dict, ast.Call]:
         if None not in node.keys:

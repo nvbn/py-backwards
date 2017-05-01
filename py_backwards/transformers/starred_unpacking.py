@@ -1,12 +1,12 @@
 from typing import Union, Iterable, List
 from typed_ast import ast3 as ast
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 Splitted = Union[List[ast.expr], ast.Starred]
 ListEntry = Union[ast.Call, ast.List]
 
 
-class StarredUnpackingTransformer(BaseTransformer):
+class StarredUnpackingTransformer(BaseNodeTransformer):
     """Compiles:
         [2, *range(10), 1]
         print(*range(1), *range(3))
