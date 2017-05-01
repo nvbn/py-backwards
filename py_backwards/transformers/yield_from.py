@@ -1,15 +1,35 @@
-from typing import Optional, List, Type, Iterable, Union
+from typing import Optional, List, Type, Union
 from typed_ast import ast3 as ast
+from ..utils.tree import insert_at
+from ..utils.snippet import snippet, let, extend
+from ..utils.helpers import VariablesGenerator
 from .base import BaseTransformer
 
 Node = Union[ast.Try, ast.If, ast.While, ast.For, ast.FunctionDef, ast.Module]
 Holder = Union[ast.Expr, ast.Assign]
 
 
+@snippet
+def result_assignment(exc, target):
+    if hasattr(exc, 'value'):
+        target = exc.value
+
+
+@snippet
+def yield_from(generator, exc, assignment):
+    let(iterable)
+    iterable = iter(generator)
+    while True:
+        try:
+            yield next(iterable)
+        except StopIteration as exc:
+            extend(assignment)
+            break
+
+
 class YieldFromTransformer(BaseTransformer):
     """Compiles yield from to special while statement."""
     target = (3, 2)
-    _name_suffix = 0
 
     def _get_yield_from_index(self, node: ast.AST,
                               type_: Type[Holder]) -> Optional[int]:
@@ -20,41 +40,17 @@ class YieldFromTransformer(BaseTransformer):
 
         return None
 
-    def _emulate_yield_from(self, targets: Optional[List[ast.Name]],
-                            node: ast.YieldFrom) -> Iterable[ast.AST]:
-        generator = ast.Name(
-            id='_py_backwards_generator_{}'.format(self._name_suffix))
-        exception = ast.Name(
-            id='_py_backwards_generator_exception_{}'.format(self._name_suffix))
+    def _emulate_yield_from(self, target: Optional[ast.AST],
+                            node: ast.YieldFrom) -> List[ast.AST]:
+        exc = VariablesGenerator.generate('exc')
+        if target is not None:
+            assignment = result_assignment.get_body(exc=exc, target=target)
+        else:
+            assignment = []
 
-        yield ast.Assign(targets=[generator],
-                         value=ast.Call(func=ast.Name(id='iter'),
-                                        args=[node.value],
-                                        keywords=[]))
-
-        assign_to_targets = [
-            ast.If(test=ast.Call(func=ast.Name(id='hasattr'), args=[
-                exception, ast.Str(s='value'),
-            ], keywords=[]), body=[
-                ast.Assign(targets=targets,
-                           value=ast.Attribute(
-                               value=exception, attr='value')),
-            ], orelse=[]),
-            ast.Break()] if targets else [ast.Break()]
-
-        yield ast.While(test=ast.NameConstant(value=True), body=[
-            ast.Try(body=[
-                ast.Expr(value=ast.Yield(value=ast.Call(
-                    func=ast.Name(id='next'),
-                    args=[generator], keywords=[]))),
-            ], handlers=[
-                ast.ExceptHandler(
-                    type=ast.Name(id='StopIteration'),
-                    name=exception.id,
-                    body=assign_to_targets),
-            ], orelse=[], finalbody=[]),
-        ], orelse=[])
-        self._name_suffix += 1
+        return yield_from.get_body(generator=node.value,
+                                   assignment=assignment,
+                                   exc=exc)
 
     def _handle_assignments(self, node: Node) -> Node:
         while True:
@@ -63,9 +59,9 @@ class YieldFromTransformer(BaseTransformer):
                 return node
 
             assign = node.body.pop(index)
-            for new_node in list(self._emulate_yield_from(assign.targets,  # type: ignore
-                                                          assign.value))[::-1]:  # type: ignore
-                node.body.insert(index, new_node)  # type: ignore
+            yield_from_ast = self._emulate_yield_from(assign.targets[0],  # type: ignore
+                                                      assign.value)  # type: ignore
+            insert_at(index, node, yield_from_ast)
 
     def _handle_expressions(self, node: Node) -> Node:
         while True:
@@ -73,10 +69,9 @@ class YieldFromTransformer(BaseTransformer):
             if index is None:
                 return node
 
-            assign = node.body.pop(index)
-            for new_node in list(self._emulate_yield_from(
-                    None, assign.value))[::-1]:  # type: ignore
-                node.body.insert(index, new_node)  # type: ignore
+            exp = node.body.pop(index)
+            yield_from_ast = self._emulate_yield_from(None, exp.value)  # type: ignore
+            insert_at(index, node, yield_from_ast)
 
     def visit(self, node: ast.AST) -> ast.AST:
         node = self._handle_assignments(node)  # type: ignore

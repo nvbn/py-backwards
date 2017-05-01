@@ -1,6 +1,8 @@
 from typed_ast import ast3 as ast
+from typed_astunparse import unparse
+from py_backwards.utils.snippet import snippet
 from py_backwards.utils.tree import (get_parent, get_non_exp_parent_and_index,
-                                     find)
+                                     find, insert_at, replace_at)
 
 
 def test_get_parent():
@@ -32,3 +34,37 @@ def fn():
     ''')
     calls = list(find(tree, ast.Call))
     assert len(calls) == 2
+
+
+@snippet
+def to_insert():
+    print(10)
+
+
+def test_insert_at():
+    tree = ast.parse('''
+def fn():
+    print('hi there')
+    ''')
+
+    insert_at(0, tree.body[0], to_insert.get_body())
+    expected_code = '''
+def fn():
+    print(10)
+    print('hi there')
+    '''
+    assert unparse(tree).strip() == expected_code.strip()
+
+
+def test_replace_at():
+    tree = ast.parse('''
+def fn():
+    print('hi there')
+    ''')
+
+    replace_at(0, tree.body[0], to_insert.get_body())
+    expected_code = '''
+def fn():
+    print(10)
+    '''
+    assert unparse(tree).strip() == expected_code.strip()

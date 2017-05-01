@@ -1,7 +1,7 @@
 from inspect import getsource
 from typing import Callable, Any, List, Dict, Iterable, Union, TypeVar
 from typed_ast import ast3 as ast
-from .tree import find, get_non_exp_parent_and_index
+from .tree import find, get_non_exp_parent_and_index, replace_at
 from .helpers import eager, VariablesGenerator
 
 Variable = Union[ast.AST, List[ast.AST], str]
@@ -76,7 +76,11 @@ class VariablesReplacer(ast.NodeTransformer):
 
     def visit_alias(self, node: ast.alias) -> ast.alias:
         node.name = self._replace_module(node.name)
-        self._replace_field_or_node(node, 'asname')
+        node = self._replace_field_or_node(node, 'asname')
+        return self.generic_visit(node)  # type: ignore
+
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> ast.ExceptHandler:
+        node = self._replace_field_or_node(node, 'name')
         return self.generic_visit(node)  # type: ignore
 
     @classmethod
@@ -91,9 +95,7 @@ def extend_tree(tree: ast.AST, variables: Dict[str, Variable]) -> None:
     for node in find(tree, ast.Call):
         if isinstance(node.func, ast.Name) and node.func.id == 'extend':
             parent, index = get_non_exp_parent_and_index(tree, node)
-            parent.body.pop(index)  # type: ignore
-            for entry in variables[node.args[0].id][::-1]:  # type: ignore
-                parent.body.insert(index, entry)  # type: ignore
+            replace_at(index, parent, variables[node.args[0].id])  # type: ignore
 
 
 # Public api:

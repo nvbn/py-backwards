@@ -1,5 +1,5 @@
 from weakref import WeakKeyDictionary
-from typing import Tuple, Iterable, Type, TypeVar
+from typing import Tuple, Iterable, Type, TypeVar, Union, List
 from typed_ast import ast3 as ast
 
 _parents = WeakKeyDictionary()  # type: WeakKeyDictionary[ast.AST, ast.AST]
@@ -39,3 +39,20 @@ def find(tree: ast.AST, type_: Type[T]) -> Iterable[T]:
     for node in ast.walk(tree):
         if isinstance(node, type_):
             yield node  # type: ignore
+
+
+def insert_at(index: int, parent: ast.AST,
+              nodes: Union[ast.AST, List[ast.AST]]) -> None:
+    """Inserts nodes to parents body at index."""
+    if not isinstance(nodes, list):
+        nodes = [nodes]
+
+    for child in nodes[::-1]:
+        parent.body.insert(index, child)  # type: ignore
+
+
+def replace_at(index: int, parent: ast.AST,
+               nodes: Union[ast.AST, List[ast.AST]]) -> None:
+    """Replaces node in parents body at index with nodes."""
+    parent.body.pop(index)  # type: ignore
+    insert_at(index, parent, nodes)

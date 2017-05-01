@@ -9,11 +9,11 @@ def fn():
     yield from range(10)
     ''', '''
 def fn():
-    _py_backwards_generator_0 = iter(range(10))
+    _py_backwards_iterable_1 = iter(range(10))
     while True:
         try:
-            (yield next(_py_backwards_generator_0))
-        except StopIteration as _py_backwards_generator_exception_0:
+            (yield next(_py_backwards_iterable_1))
+        except StopIteration as _py_backwards_exc_0:
             break
 '''),
     ('''
@@ -21,18 +21,17 @@ def fn():
     a = yield from range(10)
     ''', '''
 def fn():
-    _py_backwards_generator_0 = iter(range(10))
+    _py_backwards_iterable_1 = iter(range(10))
     while True:
         try:
-            (yield next(_py_backwards_generator_0))
-        except StopIteration as _py_backwards_generator_exception_0:
-            if hasattr(_py_backwards_generator_exception_0, 'value'):
-                a = _py_backwards_generator_exception_0.value
+            (yield next(_py_backwards_iterable_1))
+        except StopIteration as _py_backwards_exc_0:
+            if hasattr(_py_backwards_exc_0, 'value'):
+                a = _py_backwards_exc_0.value
             break
 '''),
 ])
 def test_transform(before, after):
-    print(transform(YieldFromTransformer, before))
     assert transform(YieldFromTransformer, before) == after.strip()
 
 

@@ -64,7 +64,7 @@ class DictUnpackingTransformer(BaseTransformer):
             keywords=[])
 
     def visit_Module(self, node: ast.Module) -> ast.Module:
-        node.body = merge_dicts.get_body() + node.body
+        node.body = merge_dicts.get_body() + node.body  # type: ignore
         return self.generic_visit(node)  # type: ignore
 
     def visit_Dict(self, node: ast.Dict) -> Union[ast.Dict, ast.Call]:
