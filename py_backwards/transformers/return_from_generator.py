@@ -25,7 +25,6 @@ class ReturnFromGeneratorTransformer(BaseNodeTransformer):
             raise exc
     """
     target = (3, 2)
-    _name_suffix = 0
 
     def _find_generator_returns(self, node: ast.FunctionDef) \
             -> List[Tuple[ast.stmt, ast.Return]]:

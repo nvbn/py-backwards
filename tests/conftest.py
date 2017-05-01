@@ -22,3 +22,17 @@ def as_ast():
         return ast.parse(get_source(fn))
 
     return as_ast
+
+
+def pytest_addoption(parser):
+    """Adds `--enable-functional` argument."""
+    group = parser.getgroup("py_backwards")
+    group.addoption('--enable-functional', action="store_true", default=False,
+                    help="Enable functional tests")
+
+
+@pytest.fixture(autouse=True)
+def functional(request):
+    if request.node.get_marker('functional') \
+            and not request.config.getoption('enable_functional'):
+        pytest.skip('functional tests are disabled')
