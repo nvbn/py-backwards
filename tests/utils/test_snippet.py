@@ -1,8 +1,7 @@
 from typed_ast import ast3 as ast
 from typed_astunparse import unparse
 from py_backwards.utils.snippet import (snippet, let, find_variables,
-                                        VariablesGenerator, VariablesReplacer,
-                                        extend_tree)
+                                        VariablesReplacer, extend_tree)
 
 
 def test_variables_finder():
@@ -12,10 +11,6 @@ x = 1
 let(b)
     ''')
     assert find_variables(tree) == ['a', 'b']
-
-
-def test_variables_generator():
-    assert VariablesGenerator.generate('x') != VariablesGenerator.generate('x')
 
 
 def test_variables_replacer():

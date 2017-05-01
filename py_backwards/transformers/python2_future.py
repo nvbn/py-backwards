@@ -1,4 +1,3 @@
-from typing import List
 from typed_ast import ast3 as ast
 from ..utils.snippet import snippet
 from .base import BaseTransformer
@@ -21,5 +20,5 @@ class Python2FutureTransformer(BaseTransformer):
     target = (2, 7)
 
     def visit_Module(self, node: ast.Module) -> ast.Module:
-        node.body = imports.get_body(future='__future__') + node.body
-        return self.generic_visit(node)
+        node.body = imports.get_body(future='__future__') + node.body  # type: ignore
+        return self.generic_visit(node)  # type: ignore

@@ -1,4 +1,5 @@
 from typing import NamedTuple, Tuple
+
 try:
     from pathlib import Path
 except ImportError:

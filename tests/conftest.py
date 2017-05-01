@@ -1,5 +1,5 @@
 import pytest
-from py_backwards.utils.snippet import VariablesGenerator
+from py_backwards.utils.helpers import VariablesGenerator
 
 
 @pytest.fixture(autouse=True)
