@@ -33,7 +33,7 @@ class YieldFromTransformer(BaseNodeTransformer):
 
     def _get_yield_from_index(self, node: ast.AST,
                               type_: Type[Holder]) -> Optional[int]:
-        if hasattr(node, 'body'):  # type: ignore
+        if hasattr(node, 'body') and isinstance(node.body, list):  # type: ignore
             for n, child in enumerate(node.body):  # type: ignore
                 if isinstance(child, type_) and isinstance(child.value, ast.YieldFrom):
                     return n

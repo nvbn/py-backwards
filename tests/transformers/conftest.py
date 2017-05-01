@@ -8,7 +8,7 @@ def transform():
     def transform(transformer, before):
         tree = parse(before)
         try:
-            transformer().visit(tree)
+            transformer.transform(tree)
             return unparse(tree).strip()
         except:
             print('Before:')

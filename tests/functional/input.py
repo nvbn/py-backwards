@@ -5,9 +5,8 @@ Expected output:
 1 2 3 4
 val 10
 0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
-{'x': 10, 'items': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-x
-items
+items [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+x 10
 2
 1
 10
@@ -46,9 +45,8 @@ def formatter(x: int) -> dict:
 
 
 result = {'x': 10, **formatter(10)}
-print(result)
-for key in result:
-    print(key)
+for key, value in sorted(result.items(), key=lambda x: x[0]):
+    print(key, value)
 
 i = 2
 while i:
