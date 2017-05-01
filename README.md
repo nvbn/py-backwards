@@ -1,6 +1,6 @@
 # Py-backwards [![Build Status](https://travis-ci.org/nvbn/py-backwards.svg?branch=master)](https://travis-ci.org/nvbn/py-backwards)
 
-Python to python compiler that allows you to use some Python 3.6 features in older versions, you can try it in [online demo](https://py-backwards.herokuapp.com/).
+Python to python compiler that allows you to use some Python 3.6 features in older versions, you can try it in [the online demo](https://py-backwards.herokuapp.com/).
 
 Requires Python 3.3+ to run, can compile down to 2.7.
 
@@ -121,7 +121,71 @@ pip install -r requirements.txt
 Run tests:
 
 ```bash
-py.test
+ py.test -vvvv --capture=sys --enable-functional
 ```
+
+Run tests on systems without docker:
+
+```bash
+ py.test -vvvv
+```
+
+## Writing code transformers
+
+First of all, you need to inherit from `BaseTransformer` or `BaseNodeTransformer` (if you want to use
+[NodeTransfromer](https://docs.python.org/3/library/ast.html#ast.NodeTransformer) interface).
+
+If you use `BaseTransformer`, override class method `def transform(cls, tree: ast.AST) -> ast.AST`, like:
+
+```python
+from .base import BaseTransformer
+
+
+class MyTransformer(BaseTransformer):
+    @classmethod
+    def transform(cls, tree: ast.AST) -> ast.AST:
+        return tree
+```
+
+If you use `BaseNodeTransformer`, override `visit_*` methods, for simplification this class
+have a whole tree in `self._tree`:
+
+```python
+from .base import BaseNodeTransformer
+
+
+class MyTransformer(BaseNodeTransformer):
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
+        return self.generic_visit(node)
+```
+
+After that you need to add your transformer to `transformers.__init__.transformers`.
+
+It's hard to write code in AST, because of that we have [snippets](https://github.com/nvbn/py-backwards/blob/master/py_backwards/utils/snippet.py#L102):
+
+```python
+from ..utils.snippet import snippet
+
+
+@snippet
+def my_snippet(class_name, class_body):
+    class class_name:  # will be replaced with `class_name`
+        extend(class_body)  # body of the class will be extended with `class_body`
+        
+        def fn(self):
+            let(x)  # x will be replaced everywhere with unique name, like `_py_backwards_x_1`
+            x = 10
+            return x
+```
+
+And you can easily get content of snippet with:
+
+```python
+my_snippet.get_body(class_name='MyClass',
+                    class_body=[ast.Expr(...), ...])
+```
+
+Also please look at [tree utils](https://github.com/nvbn/py-backwards/blob/master/py_backwards/utils/tree.py),
+it contains such useful functions like `find`, `get_parent` and etc.
 
 ## License MIT
