@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typed_ast import ast3 as ast
 from ..types import CompilationTarget
 
 
-class BaseTransformer(ABC):
+class BaseTransformer(metaclass=ABCMeta):
     target = None  # type: CompilationTarget
 
     @classmethod
