@@ -1,6 +1,6 @@
 from typed_ast import ast3 as ast
 from ..utils.snippet import snippet
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
 @snippet
@@ -10,7 +10,7 @@ def imports(future):
     from future import print_function
 
 
-class Python2FutureTransformer(BaseTransformer):
+class Python2FutureTransformer(BaseNodeTransformer):
     """Prepends module with:
         from __future__ import absolute_import
         from __future__ import division

@@ -1,7 +1,7 @@
 from typing import Union, Iterable, Optional, List, Tuple
 from typed_ast import ast3 as ast
 from ..utils.snippet import snippet
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
 @snippet
@@ -17,7 +17,7 @@ Splitted = List[Union[List[Tuple[ast.expr, ast.expr]], ast.expr]]
 Pair = Tuple[Optional[ast.expr], ast.expr]
 
 
-class DictUnpackingTransformer(BaseTransformer):
+class DictUnpackingTransformer(BaseNodeTransformer):
     """Compiles:
     
         {1: 1, **dict_a}

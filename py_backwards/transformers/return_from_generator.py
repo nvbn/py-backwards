@@ -1,7 +1,7 @@
 from typing import List, Tuple, Any
 from typed_ast import ast3 as ast
 from ..utils.snippet import snippet, let
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
 @snippet
@@ -12,7 +12,7 @@ def return_from_generator(return_value):
     raise exc
 
 
-class ReturnFromGeneratorTransformer(BaseTransformer):
+class ReturnFromGeneratorTransformer(BaseNodeTransformer):
     """Compiles return in generators like:
         def fn():
             yield 1

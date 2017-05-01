@@ -3,7 +3,7 @@ from typed_ast import ast3 as ast
 from ..utils.tree import insert_at
 from ..utils.snippet import snippet, let, extend
 from ..utils.helpers import VariablesGenerator
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 Node = Union[ast.Try, ast.If, ast.While, ast.For, ast.FunctionDef, ast.Module]
 Holder = Union[ast.Expr, ast.Assign]
@@ -27,7 +27,7 @@ def yield_from(generator, exc, assignment):
             break
 
 
-class YieldFromTransformer(BaseTransformer):
+class YieldFromTransformer(BaseNodeTransformer):
     """Compiles yield from to special while statement."""
     target = (3, 2)
 

@@ -1,9 +1,9 @@
 from typing import Iterable, Optional
 from typed_ast import ast3 as ast
-from .base import BaseTransformer
+from .base import BaseNodeTransformer
 
 
-class SuperWithoutArgumentsTransformer(BaseTransformer):
+class SuperWithoutArgumentsTransformer(BaseNodeTransformer):
     """Compiles:
         super()
     To:
