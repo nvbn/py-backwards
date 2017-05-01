@@ -1,6 +1,7 @@
 from weakref import WeakKeyDictionary
 from typing import Tuple, Iterable, Type, TypeVar, Union, List
 from typed_ast import ast3 as ast
+from ..exceptions import NodeNotFound
 
 _parents = WeakKeyDictionary()  # type: WeakKeyDictionary[ast.AST, ast.AST]
 
@@ -16,7 +17,10 @@ def get_parent(tree: ast.AST, node: ast.AST, rebuild: bool = False) -> ast.AST:
     if node not in _parents or rebuild:
         _build_parents(tree)
 
-    return _parents[node]
+    try:
+        return _parents[node]
+    except IndexError:
+        raise NodeNotFound('Parent for {} not found'.format(node))
 
 
 def get_non_exp_parent_and_index(tree: ast.AST, node: ast.AST) \
@@ -24,9 +28,9 @@ def get_non_exp_parent_and_index(tree: ast.AST, node: ast.AST) \
     """Get non-Exp parent and index of child."""
     parent = get_parent(tree, node)
 
-    if not hasattr(parent, 'body'):
+    while not hasattr(parent, 'body'):
         node = parent
-        parent = get_parent(tree, node)
+        parent = get_parent(tree, parent)
 
     return parent, parent.body.index(node)  # type: ignore
 
@@ -56,3 +60,15 @@ def replace_at(index: int, parent: ast.AST,
     """Replaces node in parents body at index with nodes."""
     parent.body.pop(index)  # type: ignore
     insert_at(index, parent, nodes)
+
+
+def get_closest_parent_of(tree: ast.AST, node: ast.AST,
+                          type_: Type[T]) -> T:
+    """Get a closest parent of passed type."""
+    parent = node
+
+    while True:
+        parent = get_parent(tree, parent)
+
+        if isinstance(parent, type_):
+            return parent  # type: ignore

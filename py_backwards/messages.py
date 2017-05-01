@@ -94,3 +94,11 @@ def compilation_result(result: CompilationResult) -> str:
         target='{}.{}'.format(*result.target),
         files=result.files,
         time=result.time)
+
+
+def warn(message: str) -> str:
+    return '{bright}{red}WARN:{reset} {message}'.format(
+        bright=Style.BRIGHT,
+        red=Fore.RED,
+        reset=Style.RESET_ALL,
+        message=message)

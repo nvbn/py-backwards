@@ -1,5 +1,7 @@
-from typing import Type
-from .transformers.base import BaseTransformer
+from typing import Type, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .transformers.base import BaseTransformer
 
 
 class CompilationError(Exception):
@@ -17,7 +19,7 @@ class TransformationError(Exception):
     """Raises when transformation failed."""
 
     def __init__(self, filename: str,
-                 transformer: Type[BaseTransformer],
+                 transformer: 'Type[BaseTransformer]',
                  ast: str,
                  traceback: str) -> None:
         self.filename = filename
@@ -32,3 +34,7 @@ class InvalidInputOutput(Exception):
 
 class InputDoesntExists(Exception):
     """Raises when input doesn't exists."""
+
+
+class NodeNotFound(Exception):
+    """Raises when node not found."""

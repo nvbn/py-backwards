@@ -12,7 +12,7 @@ class A:
 class A():
 
     def method(self, x):
-        return super(type(self), self).method(x)
+        return super(A, self).method(x)
     '''),
     ('''
 class A:
@@ -25,7 +25,7 @@ class A():
 
     @classmethod
     def method(cls, x):
-        return super(cls, cls).method(x)
+        return super(A, cls).method(x)
     ''')])
 def test_transform(transform, before, after):
     assert transform(SuperWithoutArgumentsTransformer, before) == after.strip()

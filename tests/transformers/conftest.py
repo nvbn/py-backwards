@@ -1,4 +1,5 @@
 import pytest
+from types import ModuleType
 from typed_ast.ast3 import parse
 from typed_astunparse import unparse, dump
 
@@ -26,8 +27,9 @@ def run_transformed(transform):
         transformed = transform(transformer, code)
         splitted = transformed.split('\n')
         splitted[-1] = '__result = ' + splitted[-1]
-        locals_ = {}
-        exec('\n'.join(splitted), {}, locals_)
-        return locals_['__result']
+        compiled = compile('\n'.join(splitted), '<generated>', 'exec')
+        module = ModuleType('<generated>')
+        exec(compiled, module.__dict__, )
+        return module.__dict__['__result']
 
     return run_transformed

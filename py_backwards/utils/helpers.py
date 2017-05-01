@@ -1,7 +1,9 @@
 from inspect import getsource
 import re
+import sys
 from typing import Any, Callable, Iterable, List, TypeVar
 from functools import wraps
+from .. import messages
 
 T = TypeVar('T')
 
@@ -31,3 +33,7 @@ def get_source(fn: Callable[..., Any]) -> str:
     source_lines = getsource(fn).split('\n')
     padding = len(re.findall(r'^(\s*)', source_lines[0])[0])
     return '\n'.join(line[padding:] for line in source_lines)
+
+
+def warn(message: str) -> None:
+    print(messages.warn(message), file=sys.stderr)

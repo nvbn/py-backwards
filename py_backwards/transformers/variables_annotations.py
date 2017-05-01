@@ -1,5 +1,7 @@
 from typed_ast import ast3 as ast
 from ..utils.tree import find, get_non_exp_parent_and_index, insert_at
+from ..utils.helpers import warn
+from ..exceptions import NodeNotFound
 from .base import BaseTransformer
 
 
@@ -16,7 +18,12 @@ class VariablesAnnotationsTransformer(BaseTransformer):
     @classmethod
     def transform(cls, tree: ast.AST) -> ast.AST:
         for node in find(tree, ast.AnnAssign):
-            parent, index = get_non_exp_parent_and_index(tree, node)
+            try:
+                parent, index = get_non_exp_parent_and_index(tree, node)
+            except NodeNotFound:
+                warn('Assignment outside of body')
+                continue
+
             parent.body.pop(index)  # type: ignore
 
             if node.value is not None:

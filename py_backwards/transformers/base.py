@@ -13,8 +13,12 @@ class BaseTransformer(metaclass=ABCMeta):
 
 
 class BaseNodeTransformer(BaseTransformer, ast.NodeTransformer):
+    def __init__(self, tree: ast.AST) -> None:
+        super().__init__()
+        self._tree = tree
+
     @classmethod
     def transform(cls, tree: ast.AST) -> ast.AST:
-        inst = cls()
+        inst = cls(tree)
         inst.visit(tree)
         return tree
