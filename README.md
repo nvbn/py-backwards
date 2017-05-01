@@ -164,7 +164,7 @@ After that you need to add your transformer to `transformers.__init__.transforme
 It's hard to write code in AST, because of that we have [snippets](https://github.com/nvbn/py-backwards/blob/master/py_backwards/utils/snippet.py#L102):
 
 ```python
-from ..utils.snippet import snippet
+from ..utils.snippet import snippet, let, extend
 
 
 @snippet
