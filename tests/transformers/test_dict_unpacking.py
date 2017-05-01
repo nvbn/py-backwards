@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.dict_unpacking import DictUnpackingTransformer
-from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -9,7 +8,7 @@ from .utils import transform, run
     ('{**x}', '_py_backwards_merge_dicts([dict(x)])'),
     ('{1: 2, **a, 3: 4, **b, 5: 6}',
      '_py_backwards_merge_dicts([{1: 2}, dict(a), {3: 4}, dict(b), {5: 6}])')])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     code = transform(DictUnpackingTransformer, before)
     assert code.split('\n')[-1] == after
 
@@ -19,5 +18,5 @@ def test_transform(before, after):
     ('{**{5: 6}}', {5: 6}),
     ('{1: 2, **{7: 8}, 3: 4, **{9: 10}, 5: 6}',
      {1: 2, 7: 8, 3: 4, 9: 10, 5: 6})])
-def test_run(code, result):
-    assert run(DictUnpackingTransformer, code) == result
+def test_run(run_transformed, code, result):
+    assert run_transformed(DictUnpackingTransformer, code) == result

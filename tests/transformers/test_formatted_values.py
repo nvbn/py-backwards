@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.formatted_values import FormattedValuesTransformer
-from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -8,7 +7,7 @@ from .utils import transform, run
     ("f'hi {x}'", "''.join(['hi ', '{}'.format(x)])"),
     ("f'hi {x.upper()} {y:1}'",
      "''.join(['hi ', '{}'.format(x.upper()), ' ', '{:1}'.format(y)])")])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     code = transform(FormattedValuesTransformer, before)
     assert code == after
 
@@ -18,5 +17,5 @@ def test_transform(before, after):
     ("x = 12; f'hi {x}'", 'hi 12'),
     ("x = 'everyone'; y = 42; f'hi {x.upper()!r} {y:x}'",
      'hi EVERYONE 2a')])
-def test_run(code, result):
-    assert run(FormattedValuesTransformer, code) == result
+def test_run(run_transformed, code, result):
+    assert run_transformed(FormattedValuesTransformer, code) == result

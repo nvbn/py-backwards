@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.super_without_arguments import SuperWithoutArgumentsTransformer
-from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -28,7 +27,7 @@ class A():
     def method(cls, x):
         return super(cls, cls).method(x)
     ''')])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     assert transform(SuperWithoutArgumentsTransformer, before) == after.strip()
 
 
@@ -57,5 +56,5 @@ class B(A):
         
 B.x()    
     ''', 5)])
-def test_run(code, result):
-    assert run(SuperWithoutArgumentsTransformer, code) == result
+def test_run(run_transformed, code, result):
+    assert run_transformed(SuperWithoutArgumentsTransformer, code) == result

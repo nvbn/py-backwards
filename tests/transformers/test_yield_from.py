@@ -1,6 +1,5 @@
 import pytest
 from py_backwards.transformers.yield_from import YieldFromTransformer
-from .utils import transform, run
 
 
 @pytest.mark.parametrize('before, after', [
@@ -31,7 +30,7 @@ def fn():
             break
 '''),
 ])
-def test_transform(before, after):
+def test_transform(transform, before, after):
     assert transform(YieldFromTransformer, before) == after.strip()
 
 
@@ -54,5 +53,5 @@ def fn():
     yield x
     
 list(fn())''', [0, 5])])
-def test_run(code, result):
-    assert run(YieldFromTransformer, code) == result
+def test_run(run_transformed, code, result):
+    assert run_transformed(YieldFromTransformer, code) == result

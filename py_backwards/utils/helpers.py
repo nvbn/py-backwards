@@ -1,3 +1,5 @@
+from inspect import getsource
+import re
 from typing import Any, Callable, Iterable, List, TypeVar
 from functools import wraps
 
@@ -22,3 +24,10 @@ class VariablesGenerator:
             return '_py_backwards_{}_{}'.format(variable, cls._counter)
         finally:
             cls._counter += 1
+
+
+def get_source(fn: Callable[..., Any]) -> str:
+    """Returns source code of the function."""
+    source_lines = getsource(fn).split('\n')
+    padding = len(re.findall(r'^(\s*)', source_lines[0])[0])
+    return '\n'.join(line[padding:] for line in source_lines)

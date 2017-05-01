@@ -1,9 +1,7 @@
-from inspect import getsource
-import re
 from typing import Callable, Any, List, Dict, Iterable, Union, TypeVar
 from typed_ast import ast3 as ast
 from .tree import find, get_non_exp_parent_and_index, replace_at
-from .helpers import eager, VariablesGenerator
+from .helpers import eager, VariablesGenerator, get_source
 
 Variable = Union[ast.AST, List[ast.AST], str]
 
@@ -121,15 +119,9 @@ class snippet:
 
         return variables  # type: ignore
 
-    def _get_source(self):
-        """Get properly aligned sources."""
-        source_lines = getsource(self._fn).split('\n')
-        padding = len(re.findall(r'^(\s*)', source_lines[0])[0])
-        return '\n'.join(line[padding:] for line in source_lines)
-
     def get_body(self, **snippet_kwargs: Variable) -> List[ast.AST]:
         """Get AST of snippet body with replaced variables."""
-        source = self._get_source()
+        source = get_source(self._fn)
         tree = ast.parse(source)
         variables = self._get_variables(tree, snippet_kwargs)
         extend_tree(tree, variables)

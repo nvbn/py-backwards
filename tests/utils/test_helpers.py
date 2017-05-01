@@ -1,4 +1,4 @@
-from py_backwards.utils.helpers import VariablesGenerator, eager
+from py_backwards.utils.helpers import VariablesGenerator, eager, get_source
 
 
 def test_eager():
@@ -14,3 +14,15 @@ def test_eager():
 def test_variables_generator():
     assert VariablesGenerator.generate('x') == '_py_backwards_x_0'
     assert VariablesGenerator.generate('x') == '_py_backwards_x_1'
+
+
+def test_get_source():
+    def fn():
+        x = 1
+
+    source = '''
+def fn():
+    x = 1
+    '''
+
+    assert get_source(fn).strip() == source.strip()
