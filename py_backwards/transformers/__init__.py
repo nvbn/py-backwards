@@ -10,16 +10,25 @@ from .python2_future import Python2FutureTransformer
 from .super_without_arguments import SuperWithoutArgumentsTransformer
 from .class_without_bases import ClassWithoutBasesTransformer
 from .import_pathlib import ImportPathlibTransformer
+from .six_moves import SixMovesTransformer
 from .base import BaseTransformer
 
-transformers = [DictUnpackingTransformer,
-                StarredUnpackingTransformer,
-                FormattedValuesTransformer,
-                FunctionsAnnotationsTransformer,
-                VariablesAnnotationsTransformer,
-                YieldFromTransformer,
-                ReturnFromGeneratorTransformer,
-                Python2FutureTransformer,
-                SuperWithoutArgumentsTransformer,
-                ClassWithoutBasesTransformer,
-                ImportPathlibTransformer]  # type: List[Type[BaseTransformer]]
+transformers = [
+    # 3.6
+    DictUnpackingTransformer,  # https://github.com/nvbn/py-backwards/issues/11
+    # 3.5
+    VariablesAnnotationsTransformer,
+    FormattedValuesTransformer,
+    # 3.4
+    StarredUnpackingTransformer,
+    # 3.2
+    YieldFromTransformer,
+    ReturnFromGeneratorTransformer,
+    # 2.7
+    FunctionsAnnotationsTransformer,
+    Python2FutureTransformer,
+    SuperWithoutArgumentsTransformer,
+    ClassWithoutBasesTransformer,
+    ImportPathlibTransformer,
+    SixMovesTransformer,
+]  # type: List[Type[BaseTransformer]]
