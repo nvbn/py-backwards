@@ -12,6 +12,8 @@ class FormattedValuesTransformer(BaseNodeTransformer):
     target = (3, 5)
 
     def visit_FormattedValue(self, node: ast.FormattedValue) -> ast.Call:
+        self._tree_changed = True
+
         if node.format_spec:
             template = ''.join(['{:', node.format_spec.s, '}'])  # type: ignore
         else:
@@ -24,6 +26,8 @@ class FormattedValuesTransformer(BaseNodeTransformer):
         return self.generic_visit(format_call)  # type: ignore
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> ast.Call:
+        self._tree_changed = True
+
         join_call = ast.Call(func=ast.Attribute(value=ast.Str(s=''),
                                                 attr='join'),
                              args=[ast.List(elts=node.values)],

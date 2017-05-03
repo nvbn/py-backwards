@@ -62,6 +62,7 @@ class YieldFromTransformer(BaseNodeTransformer):
             yield_from_ast = self._emulate_yield_from(assign.targets[0],  # type: ignore
                                                       assign.value)  # type: ignore
             insert_at(index, node, yield_from_ast)
+            self._tree_changed = True
 
     def _handle_expressions(self, node: Node) -> Node:
         while True:
@@ -72,6 +73,7 @@ class YieldFromTransformer(BaseNodeTransformer):
             exp = node.body.pop(index)
             yield_from_ast = self._emulate_yield_from(None, exp.value)  # type: ignore
             insert_at(index, node, yield_from_ast)
+            self._tree_changed = True
 
     def visit(self, node: ast.AST) -> ast.AST:
         node = self._handle_assignments(node)  # type: ignore

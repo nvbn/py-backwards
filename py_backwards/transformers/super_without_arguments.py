@@ -33,5 +33,6 @@ class SuperWithoutArgumentsTransformer(BaseNodeTransformer):
     def visit_Call(self, node: ast.Call) -> ast.Call:
         if isinstance(node.func, ast.Name) and node.func.id == 'super' and not len(node.args):
             self._replace_super_args(node)
+            self._tree_changed = True
 
         return self.generic_visit(node)  # type: ignore

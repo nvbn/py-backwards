@@ -1,4 +1,5 @@
-from typing import NamedTuple, Tuple
+from typing import NamedTuple, Tuple, List
+from typed_ast import ast3 as ast
 
 try:
     from pathlib import Path
@@ -12,8 +13,15 @@ CompilationTarget = Tuple[int, int]
 CompilationResult = NamedTuple('CompilationResult',
                                [('files', int),
                                 ('time', float),
-                                ('target', Tuple[int, int])])
+                                ('target', CompilationTarget),
+                                ('dependencies', List[str])])
 
 # Input/output pair
 InputOutput = NamedTuple('InputOutput', [('input', Path),
                                          ('output', Path)])
+
+# Result of transformers transformation
+TransformationResult = NamedTuple('TransformationResult',
+                                  [('tree', ast.AST),
+                                   ('tree_changed', bool),
+                                   ('dependencies', List[str])])

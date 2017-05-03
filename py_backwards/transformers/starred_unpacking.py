@@ -67,11 +67,15 @@ class StarredUnpackingTransformer(BaseNodeTransformer):
         if not self._has_starred(node.elts):
             return self.generic_visit(node)  # type: ignore
 
+        self._tree_changed = True
+
         return self.generic_visit(self._to_sum_of_lists(node.elts))  # type: ignore
 
     def visit_Call(self, node: ast.Call) -> ast.Call:
         if not self._has_starred(node.args):
             return self.generic_visit(self.generic_visit(node))  # type: ignore
+
+        self._tree_changed = True
 
         args = self._to_sum_of_lists(node.args)
         node.args = [ast.Starred(value=args)]

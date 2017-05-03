@@ -63,6 +63,10 @@ class ReturnFromGeneratorTransformer(BaseNodeTransformer):
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
         generator_returns = self._find_generator_returns(node)
+
+        if generator_returns:
+            self._tree_changed = True
+
         for parent, return_ in generator_returns:
             self._replace_return(parent, return_)
 

@@ -85,15 +85,25 @@ def permission_error(output: str) -> str:
 
 
 def compilation_result(result: CompilationResult) -> str:
+    if result.dependencies:
+        dependencies = ('\n  Additional dependencies:\n'
+                        '{bright}    {dependencies}{reset}').format(
+            dependencies='\n    '.join(dep for dep in result.dependencies),
+            bright=Style.BRIGHT,
+            reset=Style.RESET_ALL)
+    else:
+        dependencies = ''
+
     return ('{bright}Compilation succeed{reset}:\n'
             '  target: {bright}{target}{reset}\n'
             '  files: {bright}{files}{reset}\n'
-            '  took: {bright}{time:.2f}{reset} seconds').format(
+            '  took: {bright}{time:.2f}{reset} seconds{dependencies}').format(
         bright=Style.BRIGHT,
         reset=Style.RESET_ALL,
         target='{}.{}'.format(*result.target),
         files=result.files,
-        time=result.time)
+        time=result.time,
+        dependencies=dependencies)
 
 
 def warn(message: str) -> str:

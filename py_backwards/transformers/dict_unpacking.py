@@ -71,6 +71,7 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         if None not in node.keys:
             return self.generic_visit(node)  # type: ignore
 
+        self._tree_changed = True
         pairs = zip(node.keys, node.values)
         splitted = self._split_by_None(pairs)
         prepared = self._prepare_splitted(splitted)

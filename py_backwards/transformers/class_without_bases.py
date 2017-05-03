@@ -15,5 +15,6 @@ class ClassWithoutBasesTransformer(BaseNodeTransformer):
     def visit_ClassDef(self, node: ast.ClassDef) -> ast.ClassDef:
         if not node.bases:
             node.bases = [ast.Name(id='object')]
+            self._tree_changed = True
 
         return self.generic_visit(node)  # type: ignore

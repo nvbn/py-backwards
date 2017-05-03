@@ -20,5 +20,6 @@ class Python2FutureTransformer(BaseNodeTransformer):
     target = (2, 7)
 
     def visit_Module(self, node: ast.Module) -> ast.Module:
+        self._tree_changed = True
         node.body = imports.get_body(future='__future__') + node.body  # type: ignore
         return self.generic_visit(node)  # type: ignore

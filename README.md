@@ -135,27 +135,34 @@ Run tests on systems without docker:
 First of all, you need to inherit from `BaseTransformer` or `BaseNodeTransformer` (if you want to use
 [NodeTransfromer](https://docs.python.org/3/library/ast.html#ast.NodeTransformer) interface).
 
-If you use `BaseTransformer`, override class method `def transform(cls, tree: ast.AST) -> ast.AST`, like:
+If you use `BaseTransformer`, override class method `def transform(cls, tree: ast.AST) -> TransformationResult`, like:
 
 ```python
+from ..types import TransformationResult
 from .base import BaseTransformer
 
 
 class MyTransformer(BaseTransformer):
     @classmethod
-    def transform(cls, tree: ast.AST) -> ast.AST:
-        return tree
+    def transform(cls, tree: ast.AST) -> TransformationResult:
+        return TransformationResult(tree=tree,
+                                    tree_changed=True,
+                                    dependencies=[])
 ```
 
 If you use `BaseNodeTransformer`, override `visit_*` methods, for simplification this class
-have a whole tree in `self._tree`:
+have a whole tree in `self._tree`, you should also set `self._tree_changed = True` if the tree
+was changed:
 
 ```python
 from .base import BaseNodeTransformer
 
 
 class MyTransformer(BaseNodeTransformer):
+    dependencies = []  # additional dependencies
+
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
+        self._tree_changed = True  # Mark that transformer changed tree
         return self.generic_visit(node)
 ```
 
