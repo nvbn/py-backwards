@@ -40,8 +40,11 @@ def import_rewrite(previous, current):
 class BaseImportRewrite(BaseNodeTransformer):
     rewrites = []  # type: List[Tuple[str, str]]
 
-    def _get_matched_rewrite(self, name: str) -> Optional[Tuple[str, str]]:
+    def _get_matched_rewrite(self, name: Optional[str]) -> Optional[Tuple[str, str]]:
         """Returns rewrite for module name."""
+        if name is None:
+            return None
+
         for from_, to in self.rewrites:
             if name == from_ or name.startswith(from_ + '.'):
                 return from_, to

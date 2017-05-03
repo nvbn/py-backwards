@@ -19,7 +19,12 @@ def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, Li
         if transformer.target < target:
             continue
 
-        result = transformer.transform(tree)
+        try:
+            result = transformer.transform(tree)
+        except:
+            raise TransformationError(path, transformer,
+                                      dump(tree), format_exc())
+
         if not result.tree_changed:
             continue
 
