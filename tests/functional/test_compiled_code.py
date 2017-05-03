@@ -30,9 +30,14 @@ def test_compiled_code(spawnu, TIMEOUT, version, target):
                   'FROM python:{}'.format(version),
                   'bash')
     try:
-        compile_files(os.path.join(root, 'input.py'),
-                      os.path.join(root, output),
-                      target)
+        result = compile_files(os.path.join(root, 'input.py'),
+                               os.path.join(root, output),
+                               target)
+        if result.dependencies:
+            proc.sendline('pip install {}'.format(
+                ' '.join(result.dependencies)))
+            assert proc.expect_exact([TIMEOUT, 'Successfully installed'])
+
         proc.sendline('python{} src/tests/functional/{}'.format(
             version, output))
         # Output of `input.py` and converted:

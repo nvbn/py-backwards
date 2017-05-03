@@ -15,6 +15,8 @@ x 10
 """
 
 from contextlib import contextmanager
+from pathlib import Path
+from shlex import quote
 
 
 @contextmanager
@@ -58,7 +60,7 @@ while i:
         i -= 1
 
 
-class NumberManager:
+class NumberManager(metaclass=type):
     def ten(self):
         return 10
 
@@ -67,7 +69,7 @@ class NumberManager:
         return 11
 
 
-class ImportantNumberManager(NumberManager):
+class ImportantNumberManager(NumberManager, metaclass=type):
     def ten(self):
         return super().ten()
 
@@ -76,5 +78,9 @@ class ImportantNumberManager(NumberManager):
         return super().eleven()
 
 
+class VeryImportantNumberManager(ImportantNumberManager):
+    pass
+
+
 print(ImportantNumberManager().ten())
-print(ImportantNumberManager.eleven())
+print(VeryImportantNumberManager.eleven())
