@@ -27,10 +27,10 @@ transformers = [
     ReturnFromGeneratorTransformer,
     # 2.7
     FunctionsAnnotationsTransformer,
-    Python2FutureTransformer,
     SuperWithoutArgumentsTransformer,
     ClassWithoutBasesTransformer,
     ImportPathlibTransformer,
     SixMovesTransformer,
     MetaclassTransformer,
+    Python2FutureTransformer,  # always should be the last transformer
 ]  # type: List[Type[BaseTransformer]]
