@@ -44,7 +44,7 @@ def test_compiled_code(spawnu, TIMEOUT, version, target):
             version, output))
         # Output of `input.py` and converted:
         for line in expected_output.split('\n'):
-            assert proc.expect_exact([TIMEOUT, line], timeout=1)
+            assert proc.expect_exact([TIMEOUT, line], timeout=5)
     finally:
         try:
             os.remove(os.path.join(root, output))
