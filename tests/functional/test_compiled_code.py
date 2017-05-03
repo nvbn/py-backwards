@@ -13,6 +13,8 @@ x 10
 1
 10
 11
+works
+101 102
 '''.strip()
 
 # TODO: test also on 3.0, 3.1 and 3.2

@@ -11,6 +11,8 @@ x 10
 1
 10
 11
+works
+101 102
 
 """
 
@@ -84,3 +86,8 @@ class VeryImportantNumberManager(ImportantNumberManager):
 
 print(ImportantNumberManager().ten())
 print(VeryImportantNumberManager.eleven())
+
+r = 'works' if True else 'fails'
+print(r)
+m = [x + 1 for x in range(100, 102)]
+print(*m)

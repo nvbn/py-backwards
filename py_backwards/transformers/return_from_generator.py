@@ -39,7 +39,7 @@ class ReturnFromGeneratorTransformer(BaseNodeTransformer):
                 continue
             elif hasattr(current, 'value'):
                 to_check.append((current, current.value))  # type: ignore
-            elif hasattr(current, 'body'):
+            elif hasattr(current, 'body') and isinstance(current.body, list):
                 to_check.extend([(parent, x) for x in current.body])  # type: ignore
 
             if isinstance(current, ast.Yield) or isinstance(current, ast.YieldFrom):
