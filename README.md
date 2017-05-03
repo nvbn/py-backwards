@@ -28,6 +28,7 @@ Target 2.7:
 * [super without arguments](https://www.python.org/dev/peps/pep-3135/)
 * classes without base like `class A: pass`
 * imports from [six moves](https://pythonhosted.org/six/#module-six.moves)
+* metaclass
 
 For example, if you have some python 3.6 code, like:
 

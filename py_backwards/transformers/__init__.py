@@ -11,6 +11,7 @@ from .super_without_arguments import SuperWithoutArgumentsTransformer
 from .class_without_bases import ClassWithoutBasesTransformer
 from .import_pathlib import ImportPathlibTransformer
 from .six_moves import SixMovesTransformer
+from .metaclass import MetaclassTransformer
 from .base import BaseTransformer
 
 transformers = [
@@ -31,4 +32,5 @@ transformers = [
     ClassWithoutBasesTransformer,
     ImportPathlibTransformer,
     SixMovesTransformer,
+    MetaclassTransformer,
 ]  # type: List[Type[BaseTransformer]]
