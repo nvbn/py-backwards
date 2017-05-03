@@ -9,6 +9,7 @@ from .return_from_generator import ReturnFromGeneratorTransformer
 from .python2_future import Python2FutureTransformer
 from .super_without_arguments import SuperWithoutArgumentsTransformer
 from .class_without_bases import ClassWithoutBasesTransformer
+from .import_pathlib import ImportPathlibTransformer
 from .base import BaseTransformer
 
 transformers = [DictUnpackingTransformer,
@@ -20,4 +21,5 @@ transformers = [DictUnpackingTransformer,
                 ReturnFromGeneratorTransformer,
                 Python2FutureTransformer,
                 SuperWithoutArgumentsTransformer,
-                ClassWithoutBasesTransformer]  # type: List[Type[BaseTransformer]]
+                ClassWithoutBasesTransformer,
+                ImportPathlibTransformer]  # type: List[Type[BaseTransformer]]

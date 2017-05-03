@@ -15,6 +15,9 @@ Target 3.4:
 * [starred unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `[*range(1, 5), *range(10, 15)]` and `print(*[1, 2], 3, *[4, 5])`
 * [dict unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `{1: 2, **{3: 4}}`
 
+Target 3.3:
+* import [pathlib2](https://pypi.python.org/pypi/pathlib2/) instead of pathlib
+
 Target 3.2:
 * [yield from](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
 * [return from generator](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
@@ -132,8 +135,9 @@ Run tests on systems without docker:
 
 ## Writing code transformers
 
-First of all, you need to inherit from `BaseTransformer` or `BaseNodeTransformer` (if you want to use
-[NodeTransfromer](https://docs.python.org/3/library/ast.html#ast.NodeTransformer) interface).
+First of all, you need to inherit from `BaseTransformer`, `BaseNodeTransformer` (if you want to use
+[NodeTransfromer](https://docs.python.org/3/library/ast.html#ast.NodeTransformer) interface),
+or `BaseImportRewrite` (if you want just to change import).
 
 If you use `BaseTransformer`, override class method `def transform(cls, tree: ast.AST) -> TransformationResult`, like:
 
@@ -164,6 +168,18 @@ class MyTransformer(BaseNodeTransformer):
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
         self._tree_changed = True  # Mark that transformer changed tree
         return self.generic_visit(node)
+```
+
+If you use `BaseImportRewrite`, just override `rewrites`, like:
+
+```python
+from .base import BaseImportRewrite
+
+
+class MyTransformer(BaseImportRewrite):
+    dependencies = ['pathlib2']
+
+    rewrites = [('pathlib', 'pathlib2')]
 ```
 
 After that you need to add your transformer to `transformers.__init__.transformers`.
