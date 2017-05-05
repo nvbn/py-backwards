@@ -107,10 +107,35 @@ Installation:
 pip install py-backwards
 ```
 
-Usage:
+Compile code:
 
 ```bash
 py-backwards -i src -o compiled -t 2.7
+```
+
+For testing compiled code with each supported python version you can use [tox](https://tox.readthedocs.io/en/latest/)
+and [tox-py-backwards](https://github.com/nvbn/tox-py-backwards). You need to install them:
+
+```bash
+pip install tox tox-py-backwards
+```
+
+Fill `tox.ini` (`py_backwards = true` in `testenv` section enables py-backwards), like:
+
+```ini
+[tox]
+envlist = py27,py33,py34,py35,py36
+
+[testenv]
+deps = pytest
+commands = py.test
+py_backwards = true
+```
+
+And run tests with:
+
+```bash
+tox
 ```
 
 ## Development
