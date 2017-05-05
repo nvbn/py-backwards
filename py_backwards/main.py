@@ -13,18 +13,22 @@ def main() -> int:
         'py-backwards',
         description='Python to python compiler that allows you to use some '
                     'Python 3.6 features in older versions.')
-    parser.add_argument('-i', '--input', type=str, required=True,
+    parser.add_argument('-i', '--input', type=str, nargs='+', required=True,
                         help='input file or folder')
     parser.add_argument('-o', '--output', type=str, required=True,
                         help='output file or folder')
     parser.add_argument('-t', '--target', type=str,
                         required=True, choices=const.TARGETS.keys(),
                         help='target python version')
+    parser.add_argument('-r', '--root', type=str, required=False,
+                        help='sources root')
     args = parser.parse_args()
 
     try:
-        result = compile_files(args.input, args.output,
-                               const.TARGETS[args.target])
+        for input_ in args.input:
+            result = compile_files(input_, args.output,
+                                   const.TARGETS[args.target],
+                                   args.root)
     except exceptions.CompilationError as e:
         print(messages.syntax_error(e), file=sys.stderr)
         return 1

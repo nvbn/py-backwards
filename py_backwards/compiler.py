@@ -1,6 +1,6 @@
 from time import time
 from traceback import format_exc
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from typed_ast import ast3 as ast
 from typed_astunparse import unparse, dump
 from autopep8 import fix_code
@@ -62,13 +62,13 @@ def _compile_file(paths: InputOutput, target: CompilationTarget) -> List[str]:
     return dependencies
 
 
-def compile_files(input_: str, output: str,
-                  target: CompilationTarget) -> CompilationResult:
+def compile_files(input_: str, output: str, target: CompilationTarget,
+                  root: Optional[str] = None) -> CompilationResult:
     """Compiles all files from input_ to output."""
     dependencies = set()
     start = time()
     count = 0
-    for paths in get_input_output_paths(input_, output):
+    for paths in get_input_output_paths(input_, output, root):
         count += 1
         dependencies.update(_compile_file(paths, target))
     return CompilationResult(count, time() - start, target,
