@@ -5,7 +5,7 @@ from py_backwards.const import TARGETS
 
 expected_output = '''
 test variables: 1 2 3
-test strings: hi there hi hi there!
+test strings: hi there hi hi there! hi
 test lists: [1, 2] [1, 2] [4, 1, 2, 5] [7, 8] [7, 8]
 test dicts: [(1, 2)] [('a', 'b'), (1, 2)] [(1, 2)] [(4, 5)] [(4, 5)]
 test functions: 2 3 (1, (2, 3), {'b': 4}) (1, (2, 3), {'b': 'c'})

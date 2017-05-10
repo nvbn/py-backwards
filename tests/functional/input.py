@@ -18,10 +18,11 @@ test_variables()
 
 def test_strings():
     a = 'hi'
+    e = f'{a}'
     b: str = 'there'
     c = f'{a}'
     d = f'{a} {b}!'
-    print('test strings:', a, b, c, d)
+    print('test strings:', a, b, c, d, e)
 
 
 test_strings()
