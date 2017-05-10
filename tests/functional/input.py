@@ -1,93 +1,230 @@
-"""This file contains all supported python constructions.
-
-Expected output:
-
-1 2 3 4
-val 10
-0 1 2 3 4 5 6 7 8 9 10 0 1 2 3 4 5 6 7 8 9 10
-items [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-x 10
-2
-1
-10
-11
-works
-101 102
-
-"""
-
-from contextlib import contextmanager
-from pathlib import Path
-from shlex import quote
+"""This file contains all supported python constructions."""
 
 
-@contextmanager
-def four():
-    yield 4
+# Variables:
+
+def test_variables():
+    a = 1
+    b: int = 2
+    c: int
+    c = 3
+    print('test variables:', a, b, c)
 
 
-with four() as f:
-    xs = range(f)
-    print(*map(lambda x: x + 1, xs))
+test_variables()
 
 
-def returning_range(x: int):
-    yield from range(x)
-    return x
+# Strings:
+
+def test_strings():
+    a = 'hi'
+    b: str = 'there'
+    c = f'{a}'
+    d = f'{a} {b}!'
+    print('test strings:', a, b, c, d)
 
 
-def x_printer(x):
-    val: int
-    val = yield from returning_range(x)
-    print(f'val {val}')
+test_strings()
 
 
-def formatter(x: int) -> dict:
-    items: list = [*x_printer(x), x]
-    print(*items, *items)
-    return {'items': items}
+# Lists:
+
+def test_lists():
+    a = [1, 2]
+    b = [*a]
+    c = [4, *b, 5]
+    d: list = [7, 8]
+    e: list = [*d]
+    print('test lists:', a, b, c, d, e)
 
 
-result = {'x': 10, **formatter(10)}
-for key, value in sorted(result.items(), key=lambda x: x[0]):
-    print(key, value)
+test_lists()
 
-i = 2
-while i:
+
+# Dicts:
+
+def test_dicts():
+    a = {1: 2}
+    b = {'a': 'b', **a}
+    c = {**a}
+    d: dict = {4: 5}
+    e: dict = {**d}
+    print('test dicts:', sorted(a.items(), key=str), sorted(b.items(), key=str),
+          sorted(c.items(), key=str), sorted(d.items(), key=str),
+          sorted(e.items(), key=str))
+
+
+test_dicts()
+
+
+# Functions:
+
+def test_functions():
+    def inc(fn):
+        def wrapper(x):
+            return x + 1
+
+        return wrapper
+
+    @inc
+    def fn_a(a: int) -> int:
+        return a
+
+    @inc
+    def fn_b(b):
+        return b
+
+    def fn_c(a, *args, **kwargs):
+        return a, args, kwargs
+
+    print('test functions:', fn_a(1), fn_b(2), fn_c(1, 2, 3, b=4),
+          fn_c(*[1, 2, 3], **{'b': 'c'}))
+
+
+test_functions()
+
+
+# Cycles:
+
+def test_cycles():
+    xs = []
+    for x in range(5):
+        xs.append(x)
+
+    for y in []:
+        xs.append(y)
+    else:
+        xs.append('!')
+
+    m = 0
+    while m < 3:
+        xs.append(m)
+        m += 1
+
+    print('test cycles:', xs)
+
+
+test_cycles()
+
+
+# Class:
+
+
+def test_class():
+    class Base(type):
+        def base_method(cls, x: int) -> int:
+            return x + 1
+
+    class First(metaclass=Base):
+        def method_a(self):
+            return 2
+
+        @classmethod
+        def method_b(cls):
+            return 3
+
+        @staticmethod
+        def method_c():
+            return 4
+
+    class Second(First):
+        def method_a(self):
+            return super().method_a() * 10
+
+        @classmethod
+        def method_b(cls):
+            return super().method_b() * 10
+
+    print('test class:', First.base_method(1), First().method_a(),
+          First.method_b(), First.method_c(), Second().method_a(),
+          Second.method_b(), Second.method_c(), Second().method_c())
+
+
+test_class()
+
+
+# Generators:
+
+def test_generators():
+    def gen_a():
+        for x in range(10):
+            yield x
+
+    def gen_b():
+        yield from gen_a()
+
+    def gen_c():
+        a = yield 10
+        return a
+
+    def gen_d():
+        a = yield from gen_c()
+
+    print('test generators:', list(gen_a()), list(gen_b()), list(gen_c()),
+          list(gen_d()))
+
+
+test_generators()
+
+
+# For-comprehension:
+
+def test_for_comprehension():
+    xs = [x ** 2 for x in range(5)]
+    ys = (y + 1 for y in range(5))
+    zs = {a: b for a, b in ({'x': 1}).items()}
+    print('test for comprehension:', xs, list(ys), zs)
+
+
+test_for_comprehension()
+
+
+# Exceptions:
+
+def test_exceptions():
+    result = []
     try:
-        print(i)
-    except Exception as e:
-        print(e)
+        raise Exception()
+    except Exception:
+        result.append(1)
+    else:
+        result.append(2)
     finally:
-        i -= 1
+        result.append(3)
+    print('test exceptions:', *result)
 
 
-class NumberManager(metaclass=type):
-    def ten(self):
-        return 10
-
-    @classmethod
-    def eleven(cls):
-        return 11
+test_exceptions()
 
 
-class ImportantNumberManager(NumberManager, metaclass=type):
-    def ten(self):
-        return super().ten()
+# Context manager:
 
-    @classmethod
-    def eleven(cls):
-        return super().eleven()
+def test_context_manager():
+    result = []
+    from contextlib import contextmanager
+
+    @contextmanager
+    def manager(x):
+        try:
+            yield x
+        finally:
+            result.append(x + 1)
+
+    with manager(10) as v:
+        result.append(v)
+
+    print('test context manager:', result)
 
 
-class VeryImportantNumberManager(ImportantNumberManager):
-    pass
+test_context_manager()
 
 
-print(ImportantNumberManager().ten())
-print(VeryImportantNumberManager.eleven())
+# Imports:
 
-r = 'works' if True else 'fails'
-print(r)
-m = [x + 1 for x in range(100, 102)]
-print(*m)
+def test_imports():
+    from pathlib import Path
+    import pathlib
+    print('test import override:', Path.__name__, pathlib.PosixPath.__name__)
+
+
+test_imports()

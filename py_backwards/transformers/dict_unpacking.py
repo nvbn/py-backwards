@@ -1,6 +1,7 @@
 from typing import Union, Iterable, Optional, List, Tuple
 from typed_ast import ast3 as ast
 from ..const import TARGET_ALL
+from ..utils.tree import insert_at
 from ..utils.snippet import snippet
 from .base import BaseNodeTransformer
 
@@ -28,7 +29,7 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         _py_backwards_merge_dicts([{1: 1}], dict_a})
     
     """
-    target = TARGET_ALL # Actual target should be 3.4, but https://github.com/simonpercivall/astunparse/issues/17
+    target = TARGET_ALL  # Actual target should be 3.4, but https://github.com/simonpercivall/astunparse/issues/17
 
     def _split_by_None(self, pairs: Iterable[Pair]) -> Splitted:
         """Splits pairs to lists separated by dict unpacking statements."""
@@ -61,11 +62,11 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         """Creates call of function for merging dicts."""
         return ast.Call(
             func=ast.Name(id='_py_backwards_merge_dicts'),
-            args=[ast.List(elts=xs)],
+            args=[ast.List(elts=list(xs))],
             keywords=[])
 
     def visit_Module(self, node: ast.Module) -> ast.Module:
-        node.body = merge_dicts.get_body() + node.body  # type: ignore
+        insert_at(0, node, merge_dicts.get_body())  # type: ignore
         return self.generic_visit(node)  # type: ignore
 
     def visit_Dict(self, node: ast.Dict) -> Union[ast.Dict, ast.Call]:
