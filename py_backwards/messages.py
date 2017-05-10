@@ -112,3 +112,11 @@ def warn(message: str) -> str:
         red=Fore.RED,
         reset=Style.RESET_ALL,
         message=message)
+
+
+def debug(message: str) -> str:
+    return '{bright}{blue}DEBUG:{reset} {message}'.format(
+        bright=Style.BRIGHT,
+        blue=Fore.BLUE,
+        reset=Style.RESET_ALL,
+        message=message)
