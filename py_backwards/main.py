@@ -5,6 +5,7 @@ init()
 from argparse import ArgumentParser
 import sys
 from .compiler import compile_files
+from .conf import init_settings
 from . import const, messages, exceptions
 
 
@@ -22,7 +23,10 @@ def main() -> int:
                         help='target python version')
     parser.add_argument('-r', '--root', type=str, required=False,
                         help='sources root')
+    parser.add_argument('-d', '--debug', action='store_true', required=False,
+                        help='enable debug output')
     args = parser.parse_args()
+    init_settings(args)
 
     try:
         for input_ in args.input:

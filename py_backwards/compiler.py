@@ -1,3 +1,4 @@
+from copy import deepcopy
 from time import time
 from traceback import format_exc
 from typing import List, Tuple, Optional
@@ -8,30 +9,41 @@ from .files import get_input_output_paths, InputOutput
 from .transformers import transformers
 from .types import CompilationTarget, CompilationResult
 from .exceptions import CompilationError, TransformationError
+from .utils.helpers import debug
 
 
 def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, List[str]]:
     """Applies all transformation for passed target."""
+    debug(lambda: 'Compiling "{}"'.format(path))
     dependencies = []  # type: List[str]
+    tree = ast.parse(code, path)
+    debug(lambda: 'Initial ast:\n{}'.format(dump(tree)))
 
     for transformer in transformers:
-        tree = ast.parse(code, path)
         if transformer.target < target:
+            debug(lambda: 'Skip transformer "{}"'.format(transformer.__name__))
             continue
 
+        debug(lambda: 'Use transformer "{}"'.format(transformer.__name__))
+
+        working_tree = deepcopy(tree)
         try:
-            result = transformer.transform(tree)
+            result = transformer.transform(working_tree)
         except:
             raise TransformationError(path, transformer,
                                       dump(tree), format_exc())
 
         if not result.tree_changed:
+            debug(lambda: 'Tree not changed')
             continue
 
+        tree = working_tree
+        debug(lambda: 'Tree changed:\n{}'.format(dump(tree)))
         dependencies.extend(result.dependencies)
 
         try:
             code = unparse(tree)
+            debug(lambda: 'Code changed:\n{}'.format(code))
         except:
             raise TransformationError(path, transformer,
                                       dump(tree), format_exc())

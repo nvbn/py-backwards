@@ -3,6 +3,7 @@ import re
 import sys
 from typing import Any, Callable, Iterable, List, TypeVar
 from functools import wraps
+from ..conf import settings
 from .. import messages
 
 T = TypeVar('T')
@@ -37,3 +38,8 @@ def get_source(fn: Callable[..., Any]) -> str:
 
 def warn(message: str) -> None:
     print(messages.warn(message), file=sys.stderr)
+
+
+def debug(get_message: Callable[[], str]) -> None:
+    if settings.debug:
+        print(messages.debug(get_message()), file=sys.stderr)

@@ -10,3 +10,5 @@ TARGETS = OrderedDict([('2.7', (2, 7)),
                        ('3.6', (3, 6))])
 
 SYNTAX_ERROR_OFFSET = 5
+
+TARGET_ALL = (9999, 9999)

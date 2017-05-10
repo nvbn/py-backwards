@@ -1,4 +1,5 @@
 from typed_ast import ast3 as ast
+from ..const import TARGET_ALL
 from .base import BaseNodeTransformer
 
 
@@ -9,7 +10,7 @@ class FormattedValuesTransformer(BaseNodeTransformer):
         ''.join(['hello ', '{}'.format(x)])
     
     """
-    target = (3, 5)
+    target = TARGET_ALL
 
     def visit_FormattedValue(self, node: ast.FormattedValue) -> ast.Call:
         self._tree_changed = True

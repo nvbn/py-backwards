@@ -15,11 +15,11 @@ from .metaclass import MetaclassTransformer
 from .base import BaseTransformer
 
 transformers = [
-    # 3.6
+    # ALL
     DictUnpackingTransformer,  # https://github.com/nvbn/py-backwards/issues/11
+    FormattedValuesTransformer,
     # 3.5
     VariablesAnnotationsTransformer,
-    FormattedValuesTransformer,
     # 3.4
     StarredUnpackingTransformer,
     # 3.2
