@@ -1,5 +1,6 @@
 from typing import Union, Iterable, Optional, List, Tuple
 from typed_ast import ast3 as ast
+from ..const import TARGET_ALL
 from ..utils.snippet import snippet
 from .base import BaseNodeTransformer
 
@@ -27,7 +28,7 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         _py_backwards_merge_dicts([{1: 1}], dict_a})
     
     """
-    target = (3, 6)  # Actual target should be 3.4, but https://github.com/simonpercivall/astunparse/issues/17
+    target = TARGET_ALL # Actual target should be 3.4, but https://github.com/simonpercivall/astunparse/issues/17
 
     def _split_by_None(self, pairs: Iterable[Pair]) -> Splitted:
         """Splits pairs to lists separated by dict unpacking statements."""
