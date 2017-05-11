@@ -23,5 +23,6 @@ class A(
 _py_backwards_six_withmetaclass(B, *[C])):
     pass
     ''')])
-def test_transform(transform, before, after):
-    assert transform(MetaclassTransformer, before) == after.strip()
+def test_transform(transform, ast, before, after):
+    code = transform(MetaclassTransformer, before)
+    assert ast(code) == ast(after)

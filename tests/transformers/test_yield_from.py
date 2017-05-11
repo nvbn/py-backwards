@@ -30,8 +30,9 @@ def fn():
             break
 '''),
 ])
-def test_transform(transform, before, after):
-    assert transform(YieldFromTransformer, before) == after.strip()
+def test_transform(transform, ast, before, after):
+    code = transform(YieldFromTransformer, before)
+    assert ast(code) == ast(after)
 
 
 @pytest.mark.parametrize('code, result', [

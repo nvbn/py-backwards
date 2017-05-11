@@ -27,9 +27,9 @@ def fn():
     _py_backwards_exc_0.value = 5
     raise _py_backwards_exc_0
     ''')])
-def test_transform(transform, before, after):
+def test_transform(transform, ast, before, after):
     code = transform(ReturnFromGeneratorTransformer, before)
-    assert code == after.strip()
+    assert ast(code) == ast(after)
 
 
 get_value = '''

@@ -15,5 +15,6 @@ from __future__ import division
 from __future__ import print_function
 a = 1
     ''')])
-def test_transform(transform, before, after):
-    assert transform(Python2FutureTransformer, before) == after.strip()
+def test_transform(transform, ast, before, after):
+    code = transform(Python2FutureTransformer, before)
+    assert ast(code) == ast(after)

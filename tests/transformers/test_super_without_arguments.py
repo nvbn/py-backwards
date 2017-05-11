@@ -27,8 +27,9 @@ class A():
     def method(cls, x):
         return super(A, cls).method(x)
     ''')])
-def test_transform(transform, before, after):
-    assert transform(SuperWithoutArgumentsTransformer, before) == after.strip()
+def test_transform(transform, ast, before, after):
+    code = transform(SuperWithoutArgumentsTransformer, before)
+    assert ast(code) == ast(after)
 
 
 @pytest.mark.parametrize('code, result', [

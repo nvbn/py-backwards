@@ -1,5 +1,5 @@
 from typed_ast import ast3 as ast
-from typed_astunparse import unparse
+from astunparse import unparse
 from py_backwards.utils.snippet import (snippet, let, find_variables,
                                         VariablesReplacer, extend_tree)
 

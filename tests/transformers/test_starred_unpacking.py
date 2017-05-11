@@ -16,8 +16,9 @@ from py_backwards.transformers.starred_unpacking import StarredUnpackingTransfor
     ('print(*range(5, 10))',
      'print(*list(range(5, 10)))'),
 ])
-def test_transform(transform, before, after):
-    assert transform(StarredUnpackingTransformer, before) == after
+def test_transform(transform, ast, before, after):
+    code = transform(StarredUnpackingTransformer, before)
+    assert ast(code) == ast(after)
 
 
 @pytest.mark.parametrize('code, result', [

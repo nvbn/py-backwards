@@ -7,9 +7,9 @@ from py_backwards.transformers.formatted_values import FormattedValuesTransforme
     ("f'hi {x}'", "''.join(['hi ', '{}'.format(x)])"),
     ("f'hi {x.upper()} {y:1}'",
      "''.join(['hi ', '{}'.format(x.upper()), ' ', '{:1}'.format(y)])")])
-def test_transform(transform, before, after):
+def test_transform(transform, ast, before, after):
     code = transform(FormattedValuesTransformer, before)
-    assert code == after
+    assert ast(code) == ast(after)
 
 
 @pytest.mark.parametrize('code, result', [

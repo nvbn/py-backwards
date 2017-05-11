@@ -3,10 +3,11 @@ from py_backwards.transformers.variables_annotations import VariablesAnnotations
 
 
 @pytest.mark.parametrize('before, after', [
-    ('a: int = 10', 'a = 10 # type: int'),
+    ('a: int = 10', 'a = 10'),
     ('a: int', '')])
-def test_transform(transform, before, after):
-    assert transform(VariablesAnnotationsTransformer, before) == after
+def test_transform(transform, ast, before, after):
+    code = transform(VariablesAnnotationsTransformer, before)
+    assert ast(after) == ast(code)
 
 
 @pytest.mark.parametrize('code, result', [

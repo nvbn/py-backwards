@@ -3,8 +3,7 @@ from setuptools import setup, find_packages
 
 VERSION = '0.5.2'
 
-install_requires = ['typed-astunparse', 'astunparse', 'typed-ast',
-                    'autopep8', 'colorama']
+install_requires = ['typed-ast', 'autopep8', 'colorama', 'py-backwards-astunparse']
 extras_require = {':python_version<"3.4"': ['pathlib2'],
                   ':python_version<"3.5"': ['typing']}
 

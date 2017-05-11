@@ -27,7 +27,7 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         _py_backwards_merge_dicts([{1: 1}], dict_a})
     
     """
-    target = (3, 6)  # Actual target should be 3.4, but https://github.com/simonpercivall/astunparse/issues/17
+    target = (3, 4)
 
     def _split_by_None(self, pairs: Iterable[Pair]) -> Splitted:
         """Splits pairs to lists separated by dict unpacking statements."""

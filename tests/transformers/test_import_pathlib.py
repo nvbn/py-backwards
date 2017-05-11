@@ -24,6 +24,6 @@ try:
 except ImportError:
     from pathlib2 import Path
      ''')])
-def test_transform(transform, before, after):
+def test_transform(transform, ast, before, after):
     code = transform(ImportPathlibTransformer, before)
-    assert code.strip() == after.strip()
+    assert ast(code) == ast(after)

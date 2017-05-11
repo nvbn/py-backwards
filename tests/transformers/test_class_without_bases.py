@@ -17,5 +17,6 @@ class A():
 class A(object):
     pass
     ''')])
-def test_transform(transform, before, after):
-    assert transform(ClassWithoutBasesTransformer, before) == after.strip()
+def test_transform(transform, ast, before, after):
+    code = transform(ClassWithoutBasesTransformer, before)
+    assert ast(code) == ast(after)

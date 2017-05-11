@@ -32,6 +32,6 @@ except ImportError:
     from six.moves.urllib.request import Request as Request
     from six.moves.urllib.request import pathname2url as pathname2url
      ''')])
-def test_transform(transform, before, after):
+def test_transform(transform, ast, before, after):
     code = transform(SixMovesTransformer, before)
-    assert code.strip() == after.strip()
+    assert ast(code) == ast(after)
