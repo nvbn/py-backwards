@@ -238,4 +238,10 @@ my_snippet.get_body(class_name='MyClass',
 Also please look at [tree utils](https://github.com/nvbn/py-backwards/blob/master/py_backwards/utils/tree.py),
 it contains such useful functions like `find`, `get_parent` and etc.
 
+## Related projects
+
+* [py-backwards-astunparse](https://github.com/nvbn/py-backwards-astunparse)
+* [tox-py-backwards](https://github.com/nvbn/tox-py-backwards)
+* [pytest-docker-pexpect](https://github.com/nvbn/pytest-docker-pexpect)
+
 ## License MIT
