@@ -113,6 +113,8 @@ Compile code:
 py-backwards -i src -o compiled -t 2.7
 ```
 
+### Testing compiled code
+
 For testing compiled code with each supported python version you can use [tox](https://tox.readthedocs.io/en/latest/)
 and [tox-py-backwards](https://github.com/nvbn/tox-py-backwards). You need to install them:
 
@@ -137,6 +139,8 @@ And run tests with:
 ```bash
 tox
 ```
+
+### Distributing compiled code
 
 For distributing packages compiled with py-backwards you can use [py-backwards-packager](https://github.com/nvbn/py-backwards--packager).
 Install it with:

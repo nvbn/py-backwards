@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-VERSION = '0.5.2'
+VERSION = '0.6'
 
 install_requires = ['typed-ast', 'autopep8', 'colorama', 'py-backwards-astunparse']
 extras_require = {':python_version<"3.4"': ['pathlib2'],
