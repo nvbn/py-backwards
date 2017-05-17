@@ -268,6 +268,7 @@ it contains such useful functions like `find`, `get_parent` and etc.
 
 * [py-backwards-astunparse](https://github.com/nvbn/py-backwards-astunparse)
 * [tox-py-backwards](https://github.com/nvbn/tox-py-backwards)
+* [py-backwards-packager](https://github.com/nvbn/py-backwards--packager)
 * [pytest-docker-pexpect](https://github.com/nvbn/pytest-docker-pexpect)
 
 ## License MIT
