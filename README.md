@@ -165,8 +165,7 @@ setup(...,
       py_backwards_targets=['2.7', '3.3'])
 ```
 
-After that your code will be automatically compiled on
-`sdist`, `bdist` and `bdist_wheel`.
+After that your code will be automatically compiled on `bdist` and `bdist_wheel`.
 
 ## Development
 
