@@ -1,7 +1,7 @@
 from typed_ast import ast3 as ast
 from astunparse import unparse
 from py_backwards.utils.snippet import snippet
-from py_backwards.utils.tree import (get_parent, get_non_exp_parent_and_index,
+from py_backwards.utils.tree import (get_parent, get_node_position,
                                      find, insert_at, replace_at)
 
 
@@ -14,16 +14,32 @@ def test_get_parent(as_ast):
     assert get_parent(tree, assignment) == tree.body[0]
 
 
-def test_get_non_exp_parent_and_index(as_ast):
-    @as_ast
-    def tree():
-        x = 1
-        print(10)
+class TestGetNodePosition:
+    def test_from_body(self, as_ast):
+        @as_ast
+        def tree():
+            x = 1
+            print(10)
 
-    call = tree.body[0].body[1].value
-    parent, index = get_non_exp_parent_and_index(tree, call)
-    assert index == 1
-    assert parent == tree.body[0]
+        call = tree.body[0].body[1].value
+        position = get_node_position(tree, call)
+        assert position.index == 1
+        assert position.parent == tree.body[0]
+        assert position.attribute == 'body'
+
+    def test_from_orelse(self, as_ast):
+        @as_ast
+        def tree():
+            if True:
+                print(0)
+            else:
+                print(1)
+
+        call = tree.body[0].body[0].orelse[0].value
+        position = get_node_position(tree, call)
+        assert position.index == 0
+        assert position.parent == tree.body[0].body[0]
+        assert position.attribute == 'orelse'
 
 
 def test_find(as_ast):

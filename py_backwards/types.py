@@ -25,3 +25,10 @@ TransformationResult = NamedTuple('TransformationResult',
                                   [('tree', ast.AST),
                                    ('tree_changed', bool),
                                    ('dependencies', List[str])])
+
+# Node position in tree:
+NodePosition = NamedTuple('NodePosition',
+                          [('parent', ast.AST),
+                           ('attribute', str),
+                           ('holder', List[ast.AST]),
+                           ('index', int)])

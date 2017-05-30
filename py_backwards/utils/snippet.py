@@ -1,6 +1,6 @@
 from typing import Callable, Any, List, Dict, Iterable, Union, TypeVar
 from typed_ast import ast3 as ast
-from .tree import find, get_non_exp_parent_and_index, replace_at
+from .tree import find, get_node_position, replace_at
 from .helpers import eager, VariablesGenerator, get_source
 
 Variable = Union[ast.AST, List[ast.AST], str]
@@ -11,8 +11,8 @@ def find_variables(tree: ast.AST) -> Iterable[str]:
     """Finds variables and remove `let` calls."""
     for node in find(tree, ast.Call):
         if isinstance(node.func, ast.Name) and node.func.id == 'let':
-            parent, index = get_non_exp_parent_and_index(tree, node)
-            parent.body.pop(index)  # type: ignore
+            position = get_node_position(tree, node)
+            position.holder.pop(position.index)  # type: ignore
             yield node.args[0].id  # type: ignore
 
 
@@ -93,8 +93,10 @@ class VariablesReplacer(ast.NodeTransformer):
 def extend_tree(tree: ast.AST, variables: Dict[str, Variable]) -> None:
     for node in find(tree, ast.Call):
         if isinstance(node.func, ast.Name) and node.func.id == 'extend':
-            parent, index = get_non_exp_parent_and_index(tree, node)
-            replace_at(index, parent, variables[node.args[0].id])  # type: ignore
+            position = get_node_position(tree, node)
+            replace_at(position.index, position.parent,
+                       variables[node.args[0].id],
+                       position.attribute)  # type: ignore
 
 
 # Public api:

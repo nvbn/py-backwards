@@ -39,6 +39,7 @@ def import_rewrite(previous, current):
 
 class BaseImportRewrite(BaseNodeTransformer):
     rewrites = []  # type: List[Tuple[str, str]]
+    wrapper = import_rewrite  # type: snippet
 
     def _get_matched_rewrite(self, name: Optional[str]) -> Optional[Tuple[str, str]]:
         """Returns rewrite for module name."""
@@ -62,8 +63,8 @@ class BaseImportRewrite(BaseNodeTransformer):
             ast.alias(name=rewrote_name,
                       asname=import_as)])
 
-        return import_rewrite.get_body(previous=node,  # type: ignore
-                                       current=rewrote)[0]
+        return self.wrapper.get_body(previous=node,  # type: ignore
+                                     current=rewrote)[0]
 
     def visit_Import(self, node: ast.Import) -> Union[ast.Import, ast.Try]:
         rewrite = self._get_matched_rewrite(node.names[0].name)
