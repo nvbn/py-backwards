@@ -167,6 +167,15 @@ setup(...,
 
 After that your code will be automatically compiled on `bdist` and `bdist_wheel`.
 
+### Running on systems without Python 3.3+
+
+You can use docker for running py-backwards on systems without Python 3.3+, for example
+for testing on travis-ci with Python 2.7:
+
+```bash
+docker run -v $(pwd):/data/ nvbn/py-backwards -i example -o out -t 2.7
+```
+
 ## Development
 
 Setup:
