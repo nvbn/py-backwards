@@ -38,4 +38,5 @@ class TestCompileFiles(object):
         assert result.target == (2, 7)
         assert result.time
 
+        assert '# -*- coding: utf-8 -*-' in output.getvalue()
         assert "print(u'hello world')" in output.getvalue()

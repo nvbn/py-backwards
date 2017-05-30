@@ -10,6 +10,7 @@ from .transformers import transformers
 from .types import CompilationTarget, CompilationResult
 from .exceptions import CompilationError, TransformationError
 from .utils.helpers import debug
+from . import const
 
 
 def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, List[str]]:
@@ -67,6 +68,9 @@ def _compile_file(paths: InputOutput, target: CompilationTarget) -> List[str]:
         paths.output.parent.mkdir(parents=True)
     except FileExistsError:
         pass
+
+    if target == const.TARGETS['2.7']:
+        transformed = '# -*- coding: utf-8 -*-\n{}'.format(transformed)
 
     with paths.output.open('w') as f:
         f.write(transformed)

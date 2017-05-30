@@ -31,6 +31,7 @@ Target 2.7:
 * metaclass
 * string/unicode literals (works automatically)
 * `str` to `unicode`
+* define encoding (not transformer)
 
 For example, if you have some python 3.6 code, like:
 
