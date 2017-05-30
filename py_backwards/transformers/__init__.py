@@ -13,6 +13,7 @@ from .import_pathlib import ImportPathlibTransformer
 from .six_moves import SixMovesTransformer
 from .metaclass import MetaclassTransformer
 from .string_types import StringTypesTransformer
+from .import_dbm import ImportDbmTransformer
 from .base import BaseTransformer
 
 transformers = [
@@ -33,5 +34,6 @@ transformers = [
     SixMovesTransformer,
     MetaclassTransformer,
     StringTypesTransformer,
+    ImportDbmTransformer,
     Python2FutureTransformer,  # always should be the last transformer
 ]  # type: List[Type[BaseTransformer]]

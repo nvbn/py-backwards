@@ -32,6 +32,7 @@ Target 2.7:
 * string/unicode literals (works automatically)
 * `str` to `unicode`
 * define encoding (not transformer)
+* `dbm => anydbm` and `dbm.ndbm => dbm`
 
 For example, if you have some python 3.6 code, like:
 

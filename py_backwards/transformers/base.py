@@ -82,8 +82,8 @@ class BaseImportRewrite(BaseNodeTransformer):
                                  names=node.names,
                                  level=node.level)
 
-        return import_rewrite.get_body(previous=node,  # type: ignore
-                                       current=rewrote)[0]
+        return self.wrapper.get_body(previous=node,  # type: ignore
+                                     current=rewrote)[0]
 
     def _get_names_to_replace(self, node: ast.ImportFrom) -> Iterable[Tuple[str, Tuple[str, str]]]:
         """Finds names/aliases to replace."""
@@ -122,8 +122,8 @@ class BaseImportRewrite(BaseNodeTransformer):
             self._get_replaced_import_from_part(node, alias, names_to_replace)
             for alias in node.names]
 
-        return import_rewrite.get_body(previous=node,  # type: ignore
-                                       current=rewrotes)[0]
+        return self.wrapper.get_body(previous=node,  # type: ignore
+                                     current=rewrotes)[0]
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try]:
         rewrite = self._get_matched_rewrite(node.module)
