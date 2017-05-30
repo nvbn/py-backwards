@@ -12,6 +12,7 @@ from .class_without_bases import ClassWithoutBasesTransformer
 from .import_pathlib import ImportPathlibTransformer
 from .six_moves import SixMovesTransformer
 from .metaclass import MetaclassTransformer
+from .string_types import StringTypesTransformer
 from .base import BaseTransformer
 
 transformers = [
@@ -31,5 +32,6 @@ transformers = [
     ImportPathlibTransformer,
     SixMovesTransformer,
     MetaclassTransformer,
+    StringTypesTransformer,
     Python2FutureTransformer,  # always should be the last transformer
 ]  # type: List[Type[BaseTransformer]]

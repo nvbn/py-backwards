@@ -29,6 +29,8 @@ Target 2.7:
 * classes without base like `class A: pass`
 * imports from [six moves](https://pythonhosted.org/six/#module-six.moves)
 * metaclass
+* string/unicode literals (works automatically)
+* `str` to `unicode`
 
 For example, if you have some python 3.6 code, like:
 
