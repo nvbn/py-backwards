@@ -32,12 +32,12 @@ def get_node_position(tree: ast.AST, node: ast.AST) -> NodePosition:
         node = parent
         parent = get_parent(tree, parent)
 
-    if node in parent.body:
-        return NodePosition(parent, 'body', parent.body,
-                            parent.body.index(node))
+    if node in parent.body:  # type: ignore
+        return NodePosition(parent, 'body', parent.body,  # type: ignore
+                            parent.body.index(node))  # type: ignore
     else:
-        return NodePosition(parent, 'orelse', parent.orelse,
-                            parent.orelse.index(node))
+        return NodePosition(parent, 'orelse', parent.orelse,  # type: ignore
+                            parent.orelse.index(node))  # type: ignore
 
 
 T = TypeVar('T', bound=ast.AST)

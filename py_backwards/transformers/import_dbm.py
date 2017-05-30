@@ -31,11 +31,11 @@ class ImportDbmTransformer(BaseImportRewrite):
 
         return super().visit_Import(node)
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try]:
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try, ast.AST]:
         names = [name.name for name in node.names]
         if node.module == 'dbm' and names == ['ndbm']:
             import_ = ast.Import(names=[ast.alias(name='dbm',
                                                   asname='ndbm')])
-            return self.wrapper.get_body(previous=node, current=import_)[0]
+            return self.wrapper.get_body(previous=node, current=import_)[0]  # type: ignore
 
         return super().visit_ImportFrom(node)

@@ -125,7 +125,7 @@ class BaseImportRewrite(BaseNodeTransformer):
         return self.wrapper.get_body(previous=node,  # type: ignore
                                      current=rewrotes)[0]
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try]:
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try, ast.AST]:
         rewrite = self._get_matched_rewrite(node.module)
         if rewrite:
             return self._replace_import_from_module(node, *rewrite)

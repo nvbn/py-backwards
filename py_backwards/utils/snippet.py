@@ -94,8 +94,8 @@ def extend_tree(tree: ast.AST, variables: Dict[str, Variable]) -> None:
     for node in find(tree, ast.Call):
         if isinstance(node.func, ast.Name) and node.func.id == 'extend':
             position = get_node_position(tree, node)
-            replace_at(position.index, position.parent,
-                       variables[node.args[0].id],
+            replace_at(position.index, position.parent,  # type: ignore
+                       variables[node.args[0].id],  # type: ignore
                        position.attribute)  # type: ignore
 
 
