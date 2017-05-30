@@ -50,9 +50,13 @@ def test_dicts():
     c = {**a}
     d: dict = {4: 5}
     e: dict = {**d}
-    print('test dicts:', sorted(a.items(), key=str), sorted(b.items(), key=str),
-          sorted(c.items(), key=str), sorted(d.items(), key=str),
-          sorted(e.items(), key=str))
+    key = '{0[0]}-{0[0]}'.format
+    print('test dicts:',
+          sorted(a.items(), key=key),
+          sorted(b.items(), key=key),
+          sorted(c.items(), key=key),
+          sorted(d.items(), key=key),
+          sorted(e.items(), key=key))
 
 
 test_dicts()

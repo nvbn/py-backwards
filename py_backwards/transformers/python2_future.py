@@ -8,6 +8,7 @@ def imports(future):
     from future import absolute_import
     from future import division
     from future import print_function
+    from future import unicode_literals
 
 
 class Python2FutureTransformer(BaseNodeTransformer):
@@ -15,6 +16,7 @@ class Python2FutureTransformer(BaseNodeTransformer):
         from __future__ import absolute_import
         from __future__ import division
         from __future__ import print_function
+        from __future__ import unicode_literals
             
     """
     target = (2, 7)

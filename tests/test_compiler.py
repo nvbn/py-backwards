@@ -38,4 +38,4 @@ class TestCompileFiles(object):
         assert result.target == (2, 7)
         assert result.time
 
-        assert "print('hello world')" in output.getvalue()
+        assert "print(u'hello world')" in output.getvalue()
