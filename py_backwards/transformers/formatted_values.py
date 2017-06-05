@@ -1,3 +1,5 @@
+import functools
+
 from typed_ast import ast3 as ast
 from ..const import TARGET_ALL
 from .base import BaseNodeTransformer
@@ -7,7 +9,7 @@ class FormattedValuesTransformer(BaseNodeTransformer):
     """Compiles:
         f"hello {x}"
     To
-        ''.join(['hello ', '{}'.format(x)])
+        'hello ' + '{}'.format(x)
     
     """
     target = TARGET_ALL
@@ -28,9 +30,17 @@ class FormattedValuesTransformer(BaseNodeTransformer):
 
     def visit_JoinedStr(self, node: ast.JoinedStr) -> ast.Call:
         self._tree_changed = True
+        NONE = ast.Str(s='')
 
-        join_call = ast.Call(func=ast.Attribute(value=ast.Str(s=''),
-                                                attr='join'),
-                             args=[ast.List(elts=node.values)],
-                             keywords=[])
-        return self.generic_visit(join_call)  # type: ignore
+        init = ast.BinOp(left=NONE, right=NONE, op=ast.Add())
+
+        def to_binop(acc, next):
+            left, right, op = acc.left, acc.right, acc.op
+            if left is NONE:
+                return ast.BinOp(left=right, right=next, op=op)
+            return ast.BinOp(left=acc, right=next, op=op)
+
+        value = functools.reduce(to_binop, node.values, init)
+        concat_expr = ast.Expr(value=value)
+
+        return self.generic_visit(concat_expr)  # type: ignore
