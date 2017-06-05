@@ -4,9 +4,10 @@ from py_backwards.transformers.formatted_values import FormattedValuesTransforme
 
 @pytest.mark.parametrize('before, after', [
     ("f'hi'", "'hi'"),
-    ("f'hi {x}'", "''.join(['hi ', '{}'.format(x)])"),
+    ("f'hi {x}'", "'hi ' + '{}'.format(x)"),
+    ("d = f'{a} {b}!'", "d = '{}'.format(a) + ' ' + '{}'.format(b) + '!'"),
     ("f'hi {x.upper()} {y:1}'",
-     "''.join(['hi ', '{}'.format(x.upper()), ' ', '{:1}'.format(y)])")])
+     "'hi ' + '{}'.format(x.upper()) + ' ' + '{:1}'.format(y)")])
 def test_transform(transform, ast, before, after):
     code = transform(FormattedValuesTransformer, before)
     assert ast(code) == ast(after)
