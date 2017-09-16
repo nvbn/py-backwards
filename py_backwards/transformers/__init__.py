@@ -2,6 +2,7 @@ from typing import List, Type
 from .dict_unpacking import DictUnpackingTransformer
 from .formatted_values import FormattedValuesTransformer
 from .functions_annotations import FunctionsAnnotationsTransformer
+from .keyword_only_arguments import KeywordOnlyArgumentsTransformer
 from .starred_unpacking import StarredUnpackingTransformer
 from .variables_annotations import VariablesAnnotationsTransformer
 from .yield_from import YieldFromTransformer
@@ -28,6 +29,7 @@ transformers = [
     ReturnFromGeneratorTransformer,
     # 2.7
     FunctionsAnnotationsTransformer,
+    KeywordOnlyArgumentsTransformer,
     SuperWithoutArgumentsTransformer,
     ClassWithoutBasesTransformer,
     ImportPathlibTransformer,
