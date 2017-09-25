@@ -1,7 +1,7 @@
 import pytest
 from types import ModuleType
 from typed_ast.ast3 import parse, dump
-from astunparse import unparse, dump as dump_pretty
+from typed_astunparse import unparse, dump as dump_pretty
 
 
 @pytest.fixture

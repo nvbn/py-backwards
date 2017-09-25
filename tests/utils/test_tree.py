@@ -1,5 +1,5 @@
 from typed_ast import ast3 as ast
-from astunparse import unparse
+from typed_astunparse import unparse
 from py_backwards.utils.snippet import snippet
 from py_backwards.utils.tree import (get_parent, get_node_position,
                                      find, insert_at, replace_at)
