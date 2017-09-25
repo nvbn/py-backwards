@@ -3,7 +3,7 @@ from time import time
 from traceback import format_exc
 from typing import List, Tuple, Optional
 from typed_ast import ast3 as ast
-from astunparse import unparse, dump
+from typed_astunparse import unparse, dump
 from autopep8 import fix_code
 from .files import get_input_output_paths, InputOutput
 from .transformers import transformers

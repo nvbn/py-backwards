@@ -11,7 +11,7 @@ class VariablesAnnotationsTransformer(BaseTransformer):
         a: int = 10
         b: int
     To:
-        a = 10
+        a = 10  # type: int
 
     """
     target = (3, 5)
