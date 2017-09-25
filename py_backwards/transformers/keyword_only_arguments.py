@@ -1,4 +1,3 @@
-from typed_ast import ast3 as ast
 from .base import BaseNodeTransformer
 
 
