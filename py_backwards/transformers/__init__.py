@@ -28,8 +28,8 @@ transformers = [
     YieldFromTransformer,
     ReturnFromGeneratorTransformer,
     # 2.7
-    FunctionsAnnotationsTransformer,
     KeywordOnlyArgumentsTransformer,
+    FunctionsAnnotationsTransformer,
     SuperWithoutArgumentsTransformer,
     ClassWithoutBasesTransformer,
     ImportPathlibTransformer,
