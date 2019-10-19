@@ -1,6 +1,6 @@
-from typed_ast import ast3 as ast
 from ..utils.snippet import snippet
 from ..utils.tree import insert_at
+from .. import ast
 from .base import BaseNodeTransformer
 
 
@@ -19,8 +19,9 @@ class MetaclassTransformer(BaseNodeTransformer):
         class A(metaclass=B):
             pass
     To:
-        class A(_py_backwards_six_with_metaclass(B))
-    
+        class A(_py_backwards_six_with_metaclass(B)):
+            pass
+
     """
     target = (2, 7)
     dependencies = ['six']

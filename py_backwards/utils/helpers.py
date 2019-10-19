@@ -24,7 +24,9 @@ class VariablesGenerator:
     def generate(cls, variable: str) -> str:
         """Generates unique name for variable."""
         try:
-            return '_py_backwards_{}_{}'.format(variable, cls._counter)
+            debug(lambda: 'Generating _py_backwards_{}_{:x}'.format(
+                variable, cls._counter))
+            return '_py_backwards_{}_{:x}'.format(variable, cls._counter)
         finally:
             cls._counter += 1
 

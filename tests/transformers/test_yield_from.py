@@ -46,13 +46,11 @@ list(fn())
 def fn():
     def fake_gen():
         yield 0
-        exc = StopIteration()
-        exc.value = 5
-        raise exc
+        return 5
 
     x = yield from fake_gen()
     yield x
-    
+
 list(fn())''', [0, 5])])
 def test_run(run_transformed, code, result):
     assert run_transformed(YieldFromTransformer, code) == result

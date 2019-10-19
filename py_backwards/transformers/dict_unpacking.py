@@ -1,7 +1,7 @@
 from typing import Union, Iterable, Optional, List, Tuple
-from typed_ast import ast3 as ast
 from ..utils.tree import insert_at
 from ..utils.snippet import snippet
+from .. import ast
 from .base import BaseNodeTransformer
 
 
@@ -20,13 +20,13 @@ Pair = Tuple[Optional[ast.expr], ast.expr]
 
 class DictUnpackingTransformer(BaseNodeTransformer):
     """Compiles:
-    
+
         {1: 1, **dict_a}
-        
+
     To:
-    
-        _py_backwards_merge_dicts([{1: 1}], dict_a})
-    
+
+        _py_backwards_merge_dicts(({1: 1}, dict_a))
+
     """
     target = (3, 4)
 
@@ -61,7 +61,7 @@ class DictUnpackingTransformer(BaseNodeTransformer):
         """Creates call of function for merging dicts."""
         return ast.Call(
             func=ast.Name(id='_py_backwards_merge_dicts'),
-            args=[ast.List(elts=list(xs))],
+            args=[ast.Tuple(elts=list(xs))],
             keywords=[])
 
     def visit_Module(self, node: ast.Module) -> ast.Module:

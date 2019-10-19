@@ -2,7 +2,6 @@ from copy import deepcopy
 from time import time
 from traceback import format_exc
 from typing import List, Tuple, Optional
-from typed_ast import ast3 as ast
 from astunparse import unparse, dump
 from autopep8 import fix_code
 from .files import get_input_output_paths, InputOutput
@@ -10,7 +9,7 @@ from .transformers import transformers
 from .types import CompilationTarget, CompilationResult
 from .exceptions import CompilationError, TransformationError
 from .utils.helpers import debug
-from . import const
+from . import ast, const
 
 
 def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, List[str]]:
@@ -30,6 +29,17 @@ def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, Li
         working_tree = deepcopy(tree)
         try:
             result = transformer.transform(working_tree)
+        except SyntaxError as exc:
+            if isinstance(getattr(exc, 'ast_node', None), ast.AST):
+                if not getattr(exc.ast_node, 'lineno', None): # type: ignore
+                    ast.fix_missing_locations(working_tree)
+                exc.lineno = getattr(exc.ast_node, 'lineno', 0) # type: ignore
+                exc.offset = getattr(exc.ast_node, 'col_offset', -1) + 1 # type: ignore
+            else:
+                exc.lineno = exc.lineno or 0
+                exc.offset = exc.offset or 0
+
+            raise exc
         except:
             raise TransformationError(path, transformer,
                                       dump(tree), format_exc())
@@ -49,7 +59,10 @@ def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, Li
             raise TransformationError(path, transformer,
                                       dump(tree), format_exc())
 
-    return fix_code(code), dependencies
+    # Disable E402 (moving imports to the top of the file) as it breaks.
+    code = fix_code(code, options={'ignore': ['E226', 'E24', 'W50', 'W690',
+                                              'E402']})
+    return code, dependencies
 
 
 def _compile_file(paths: InputOutput, target: CompilationTarget) -> List[str]:
@@ -62,14 +75,14 @@ def _compile_file(paths: InputOutput, target: CompilationTarget) -> List[str]:
                                                code, target)
     except SyntaxError as e:
         raise CompilationError(paths.input.as_posix(),
-                               code, e.lineno, e.offset)
+                               code, e.lineno, e.offset or 0)
 
     try:
         paths.output.parent.mkdir(parents=True)
     except FileExistsError:
         pass
 
-    if target == const.TARGETS['2.7']:
+    if target <= const.TARGETS['2.7']:
         transformed = '# -*- coding: utf-8 -*-\n{}'.format(transformed)
 
     with paths.output.open('w') as f:

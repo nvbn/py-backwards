@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from .. import ast
 from ..utils.tree import find, get_node_position, insert_at
 from ..utils.helpers import warn
 from ..types import TransformationResult

@@ -1,5 +1,5 @@
 from typing import List, Tuple, Any
-from typed_ast import ast3 as ast
+from .. import ast
 from ..utils.snippet import snippet, let
 from .base import BaseNodeTransformer
 
@@ -40,7 +40,7 @@ class ReturnFromGeneratorTransformer(BaseNodeTransformer):
             elif hasattr(current, 'value'):
                 to_check.append((current, current.value))  # type: ignore
             elif hasattr(current, 'body') and isinstance(current.body, list):  # type: ignore
-                to_check.extend([(parent, x) for x in current.body])  # type: ignore
+                to_check.extend((current, x) for x in current.body)  # type: ignore
 
             if isinstance(current, ast.Yield) or isinstance(current, ast.YieldFrom):
                 has_yield = True
@@ -58,7 +58,9 @@ class ReturnFromGeneratorTransformer(BaseNodeTransformer):
         index = parent.body.index(return_)
         parent.body.pop(index)
 
-        for line in return_from_generator.get_body(return_value=return_.value)[::-1]:
+        value = return_.value
+        assert value
+        for line in return_from_generator.get_body(return_value=value)[::-1]:
             parent.body.insert(index, line)
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:

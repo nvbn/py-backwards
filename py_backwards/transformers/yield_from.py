@@ -1,8 +1,8 @@
 from typing import Optional, List, Type, Union
-from typed_ast import ast3 as ast
+from .. import ast
 from ..utils.tree import insert_at
 from ..utils.snippet import snippet, let, extend
-from ..utils.helpers import VariablesGenerator
+from ..utils.helpers import VariablesGenerator, warn
 from .base import BaseNodeTransformer
 
 Node = Union[ast.Try, ast.If, ast.While, ast.For, ast.FunctionDef, ast.Module]
@@ -11,8 +11,9 @@ Holder = Union[ast.Expr, ast.Assign]
 
 @snippet
 def result_assignment(exc, target):
-    if hasattr(exc, 'value'):
-        target = exc.value
+    target = getattr(exc, 'value', None)
+    # if hasattr(exc, 'value'):
+    #     target = exc.value
 
 
 @snippet

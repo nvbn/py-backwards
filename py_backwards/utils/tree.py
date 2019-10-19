@@ -1,6 +1,6 @@
 from weakref import WeakKeyDictionary
 from typing import Iterable, Type, TypeVar, Union, List
-from typed_ast import ast3 as ast
+from .. import ast
 from ..types import NodePosition
 from ..exceptions import NodeNotFound
 

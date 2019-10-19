@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from .. import ast
 from ..utils.tree import get_closest_parent_of
 from ..utils.helpers import warn
 from ..exceptions import NodeNotFound
@@ -11,7 +11,7 @@ class SuperWithoutArgumentsTransformer(BaseNodeTransformer):
     To:
         super(Cls, self)
         super(Cls, cls)
-            
+
     """
     target = (2, 7)
 
@@ -31,7 +31,8 @@ class SuperWithoutArgumentsTransformer(BaseNodeTransformer):
         node.args = [ast.Name(id=cls.name), ast.Name(id=func.args.args[0].arg)]
 
     def visit_Call(self, node: ast.Call) -> ast.Call:
-        if isinstance(node.func, ast.Name) and node.func.id == 'super' and not len(node.args):
+        if isinstance(node.func, ast.Name) and node.func.id == 'super' and \
+                not node.args:
             self._replace_super_args(node)
             self._tree_changed = True
 

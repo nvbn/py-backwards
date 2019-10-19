@@ -1,5 +1,5 @@
 from typing import Callable, Any, List, Dict, Iterable, Union, TypeVar
-from typed_ast import ast3 as ast
+from .. import ast
 from .tree import find, get_node_position, replace_at
 from .helpers import eager, VariablesGenerator, get_source
 
@@ -31,7 +31,10 @@ class VariablesReplacer(ast.NodeTransformer):
             if isinstance(self._variables[value], str):
                 setattr(node, field, self._variables[value])
             elif all_types or isinstance(self._variables[value], type(node)):
-                node = self._variables[value]  # type: ignore
+                if isinstance(self._variables[value], list):
+                    node = self._variables[value][0]  # type: ignore
+                else:
+                    node = self._variables[value]  # type: ignore
 
         return node
 
@@ -70,7 +73,8 @@ class VariablesReplacer(ast.NodeTransformer):
         return '.'.join(_replace(part) for part in module.split('.'))
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> ast.ImportFrom:
-        node.module = self._replace_module(node.module)
+        if node.module is not None:
+            node.module = self._replace_module(node.module)
         return self.generic_visit(node)  # type: ignore
 
     def visit_alias(self, node: ast.alias) -> ast.alias:
@@ -133,13 +137,13 @@ class snippet:
 
 def let(var: Any) -> None:
     """Declares unique value in snippet. Code of snippet like:
-    
+
         let(x)
         x += 1
         y = 1
-        
+
     Will end up like:
-        
+
         _py_backwards_x_0 += 1
         y = 1
     """
@@ -147,12 +151,12 @@ def let(var: Any) -> None:
 
 def extend(var: Any) -> None:
     """Extends code, so code like:
-    
+
         extend(vars)
         print(x, y)
-        
+
     When vars contains AST of assignments will end up:
-    
+
         x = 1
         x = 2
         print(x, y)

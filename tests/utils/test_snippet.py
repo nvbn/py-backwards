@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from py_backwards import ast
 from astunparse import unparse
 from py_backwards.utils.snippet import (snippet, let, find_variables,
                                         VariablesReplacer, extend_tree)
@@ -87,7 +87,7 @@ def my_snippet(class_name, x_value):
 initial_code = '''
 def fn():
     pass
-    
+
 result = fn()
 '''
 

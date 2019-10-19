@@ -63,3 +63,9 @@ target/
 .*.swp
 example
 tests/functional/output*py
+
+# mypy
+.mypy_cache/
+
+# Misc
+/test*.py

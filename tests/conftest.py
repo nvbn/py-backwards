@@ -1,5 +1,5 @@
 import pytest
-from typed_ast import ast3 as ast
+from py_backwards import ast
 from py_backwards.utils.helpers import VariablesGenerator, get_source
 
 
@@ -33,6 +33,6 @@ def pytest_addoption(parser):
 
 @pytest.fixture(autouse=True)
 def functional(request):
-    if request.node.get_marker('functional') \
+    if request.node.get_closest_marker('functional') \
             and not request.config.getoption('enable_functional'):
         pytest.skip('functional tests are disabled')
