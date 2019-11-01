@@ -130,7 +130,7 @@ class WalrusTransformer(BaseNodeTransformer):
         Checks if any walrus operators are in node without any sanity checks.
         """
         try:
-            next(iter(find(node, ast.NamedExpr)))
+            next(iter(find(node, NamedExpr)))
             return True
         except StopIteration:
             return False
