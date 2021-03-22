@@ -2,14 +2,17 @@ from copy import deepcopy
 from time import time
 from traceback import format_exc
 from typing import List, Tuple, Optional
-from astunparse import unparse, dump
+try:
+    from ast import dump
+except ImportError:
+    from astunparse import dump
 from autopep8 import fix_code
 from .files import get_input_output_paths, InputOutput
 from .transformers import transformers
 from .types import CompilationTarget, CompilationResult
 from .exceptions import CompilationError, TransformationError
 from .utils.helpers import debug
-from . import ast, const
+from . import ast, const, unparse
 
 
 def _transform(path: str, code: str, target: CompilationTarget) -> Tuple[str, List[str]]:

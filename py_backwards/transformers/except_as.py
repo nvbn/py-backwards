@@ -1,5 +1,4 @@
-from astunparse import unparse
-from .. import ast
+from .. import ast, unparse
 from .base import BaseNodeTransformer
 
 class ExceptAsTransformer(BaseNodeTransformer):

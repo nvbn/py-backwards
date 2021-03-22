@@ -1,10 +1,15 @@
 
 import sys
-if sys.version_info >= (3, 8):
+if sys.version_info >= (3, 9):
+    import ast
+    def unparse(tree):
+        return ast.unparse(ast.fix_missing_locations(tree))
+elif sys.version_info >= (3, 8):
     import ast
 
     # A hack to allow astunparse to parse ast.Constant-s.
     import astunparse
+    from astunparse import unparse
     from types import SimpleNamespace as _SimpleNamespace
 
     def _Constant(self, tree):
@@ -34,3 +39,4 @@ if sys.version_info >= (3, 8):
     del _Constant, _NamedExpr
 else:
     from typed_ast import ast3 as ast
+    from astunparse import unparse
