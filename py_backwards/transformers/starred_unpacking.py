@@ -1,5 +1,5 @@
 from typing import Union, Iterable, List
-from typed_ast import ast3 as ast
+from .. import ast
 from .base import BaseNodeTransformer
 
 Splitted = Union[List[ast.expr], ast.Starred]
@@ -13,7 +13,7 @@ class StarredUnpackingTransformer(BaseNodeTransformer):
     To:
         [2] + list(range(10)) + [1]
         print(*(list(range(1)) + list(range(3))))
-        
+
     """
     target = (3, 4)
 

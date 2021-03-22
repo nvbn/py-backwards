@@ -1,5 +1,5 @@
 from typing import NamedTuple, Tuple, List
-from typed_ast import ast3 as ast
+from . import ast
 
 try:
     from pathlib import Path

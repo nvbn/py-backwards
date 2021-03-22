@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from .. import ast
 from .base import BaseNodeTransformer
 
 
@@ -7,8 +7,9 @@ class ClassWithoutBasesTransformer(BaseNodeTransformer):
         class A:
             pass
     To:
-        class A(object)
-    
+        class A(object):
+            pass
+
     """
     target = (2, 7)
 

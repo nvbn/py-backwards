@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import List, Tuple, Union, Optional, Iterable, Dict
-from typed_ast import ast3 as ast
+from .. import ast
 from ..types import CompilationTarget, TransformationResult
 from ..utils.snippet import snippet, extend
 
@@ -71,16 +71,19 @@ class BaseImportRewrite(BaseNodeTransformer):
         if rewrite:
             return self._replace_import(node, *rewrite)
 
-        return self.generic_visit(node)
+        return self.generic_visit(node) # type: ignore
 
     def _replace_import_from_module(self, node: ast.ImportFrom, from_: str, to: str) -> ast.Try:
         """Replaces import from with try/except with old and new import module."""
         self._tree_changed = True
 
-        rewrote_module = node.module.replace(from_, to, 1)
-        rewrote = ast.ImportFrom(module=rewrote_module,
-                                 names=node.names,
-                                 level=node.level)
+        if node.module:
+            rewrote_module = node.module.replace(from_, to, 1)
+            rewrote = ast.ImportFrom(module=rewrote_module,
+                                     names=node.names,
+                                     level=node.level)
+        else:
+            rewrote = node
 
         return self.wrapper.get_body(previous=node,  # type: ignore
                                      current=rewrote)[0]
@@ -112,9 +115,9 @@ class BaseImportRewrite(BaseNodeTransformer):
 
     def _replace_import_from_names(self, node: ast.ImportFrom,
                                    names_to_replace: Dict[str, Tuple[str, str]]) -> ast.Try:
-        """Replaces import from with try/except with old and new 
+        """Replaces import from with try/except with old and new
         import module and names.
-        
+
         """
         self._tree_changed = True
 
@@ -123,9 +126,9 @@ class BaseImportRewrite(BaseNodeTransformer):
             for alias in node.names]
 
         return self.wrapper.get_body(previous=node,  # type: ignore
-                                     current=rewrotes)[0]
+                                     current=rewrotes)[0]  # type: ignore
 
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> Union[ast.ImportFrom, ast.Try, ast.AST]:
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> ast.AST:
         rewrite = self._get_matched_rewrite(node.module)
         if rewrite:
             return self._replace_import_from_module(node, *rewrite)
@@ -134,4 +137,4 @@ class BaseImportRewrite(BaseNodeTransformer):
         if names_to_replace:
             return self._replace_import_from_names(node, names_to_replace)
 
-        return self.generic_visit(node)
+        return self.generic_visit(node) # type: ignore

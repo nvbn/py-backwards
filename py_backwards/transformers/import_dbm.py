@@ -1,5 +1,5 @@
 from typing import Union
-from typed_ast import ast3 as ast
+from .base import ast
 from ..utils.snippet import snippet, extend
 from .base import BaseImportRewrite
 
@@ -14,7 +14,7 @@ def import_rewrite(previous, current):
 
 class ImportDbmTransformer(BaseImportRewrite):
     """Replaces:
-    
+
         dbm => anydbm
         dbm.ndbm => dbm
 

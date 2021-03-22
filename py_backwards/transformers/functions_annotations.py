@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from .. import ast
 from .base import BaseNodeTransformer
 
 
@@ -9,7 +9,7 @@ class FunctionsAnnotationsTransformer(BaseNodeTransformer):
     To:
         def fn(x):
             pass
-            
+
     """
     target = (2, 7)
 

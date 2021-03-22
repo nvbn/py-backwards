@@ -1,40 +1,73 @@
 # Py-backwards [![Build Status](https://travis-ci.org/nvbn/py-backwards.svg?branch=master)](https://travis-ci.org/nvbn/py-backwards)
 
-Python to python compiler that allows you to use some Python 3.6 features in older versions, you can try it in [the online demo](https://py-backwards.herokuapp.com/).
+Python to python compiler that allows you to use some Python 3.6+ features in older versions, you can try it in [the online demo](https://py-backwards.herokuapp.com/).
 
-Requires Python 3.3+ to run, can compile down to 2.7.
+Requires Python 3.3+ to run, can compile down to 2.7 (and down to 2.5 if you
+only use a subset of Python 3).
+
+Note that py_backwards creates variables beginning with `_py_backwards` for
+internal use, to prevent variable conflicts try to avoid function/variable
+names beginning with `_py_backwards` in your code.
 
 ## Supported features
 
+Target 3.7:
+* [Certain walrus operators](https://docs.python.org/3.8/whatsnew/3.8.html#assignment-expressions) - This is rather hit and miss, and some walrus operators currently
+    only work on CPython and only if the variable has already been defined in
+    the same scope.
+* [Positional only parameters](https://docs.python.org/3.8/whatsnew/3.8.html#positional-only-parameters)
+* [Self-documenting f-string expressions](https://docs.python.org/3.8/whatsnew/3.8.html#f-strings-support-for-self-documenting-expressions-and-debugging) (works automatically)
+
 Target 3.5:
-* [formatted string literals](https://docs.python.org/3/whatsnew/3.6.html#pep-498-formatted-string-literals) like `f'hi {x}'`
-* [variables annotations](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep526) like `x: int = 10` and `x: int`
-* [underscores in numeric literals](https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals) like `1_000_000` (works automatically)
+* [Formatted string literals](https://docs.python.org/3/whatsnew/3.6.html#pep-498-formatted-string-literals) like `f'hi {x}'`
+* [Variable annotations](https://docs.python.org/3/whatsnew/3.6.html#whatsnew36-pep526) like `x: int = 10` and `x: int`
+* [Asynchronous generators](https://www.python.org/dev/peps/pep-0525)
+* [Underscores in numeric literals](https://docs.python.org/3/whatsnew/3.6.html#pep-515-underscores-in-numeric-literals) like `1_000_000` (works automatically)
 
 Target 3.4:
-* [starred unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `[*range(1, 5), *range(10, 15)]` and `print(*[1, 2], 3, *[4, 5])`
-* [dict unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `{1: 2, **{3: 4}}`
+* [Starred unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `[*range(1, 5), *range(10, 15)]` and `print(*[1, 2], 3, *[4, 5])`
+* [Dict unpacking](https://docs.python.org/3/whatsnew/3.5.html#pep-448-additional-unpacking-generalizations) like `{1: 2, **{3: 4}}`
 
 Target 3.3:
-* import [pathlib2](https://pypi.python.org/pypi/pathlib2/) instead of pathlib
+* Import [pathlib2](https://pypi.python.org/pypi/pathlib2/) instead of pathlib
 
 Target 3.2:
-* [yield from](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
-* [return from generator](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
+* [`yield from`](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
+* [Return from generator](https://docs.python.org/3/whatsnew/3.3.html#pep-380)
 
 Target 2.7:
-* [functions annotations](https://www.python.org/dev/peps/pep-3107/) like `def fn(a: int) -> str`
-* [imports from `__future__`](https://docs.python.org/3/howto/pyporting.html#prevent-compatibility-regressions)
-* [super without arguments](https://www.python.org/dev/peps/pep-3135/)
-* classes without base like `class A: pass`
-* imports from [six moves](https://pythonhosted.org/six/#module-six.moves)
-* metaclass
-* string/unicode literals (works automatically)
+* [Keyword only arguments](https://www.python.org/dev/peps/pep-3102/)
+* [Function annotations](https://www.python.org/dev/peps/pep-3107/) like `def fn(a: int) -> str`
+* [Imports from `__future__`](https://docs.python.org/3/howto/pyporting.html#prevent-compatibility-regressions)
+* [`super()` without arguments](https://www.python.org/dev/peps/pep-3135/)
+* [The `nonlocal` statement](https://www.python.org/dev/peps/pep-3104/),
+    provided you don't try and check for variables used with `nonlocal` in
+    `locals()`.
+* Implicit `object` class base.
+* Imports from [six.moves](https://pythonhosted.org/six/#module-six.moves)
+* Metaclasses
+* A `__nonzero__` alias for any `__bool__` methods.
+* String/unicode literals (works automatically)
 * `str` to `unicode`
-* define encoding (not transformer)
+* Add `# -*- coding: utf-8 -*-` (not transformer)
 * `dbm => anydbm` and `dbm.ndbm => dbm`
+* [Non-ASCII identifiers](https://www.python.org/dev/peps/pep-3131/). Non-ASCII
+    identifiers are mangled currently mangled in a similar way to
+    [Hy](https://docs.hylang.org/en/stable/language/syntax.html#mangling).
 
-For example, if you have some python 3.6 code, like:
+Target 2.6:
+* Class decorators
+* Dict comprehension
+* Set literals
+
+Target 2.5:
+* `six.print_()` instead of `print()`.
+* `six.advance_iterator()` instead of `next()`.
+* `except as` (note that this breaks compatibility with Python 3.0+).
+* Keyword arguments after `*args`.
+* An `itertools.zip_longest` backport.
+
+For example, if you have some Python 3.6 code, like:
 
 ```python
 def returning_range(x: int):
@@ -80,7 +113,7 @@ print(ImportantNumberManager().ten())
 print(ImportantNumberManager.eleven())
 ```
 
-You can compile it for python 2.7 with:
+You can compile it for Python 2.7 with:
 
 ```bash
 ➜ py-backwards -i input.py -o output.py -t 2.7
@@ -154,7 +187,7 @@ pip install py-backwards-packager
 ```
 
 And change `setup` import in `setup.py` to:
- 
+
 ```python
 try:
     from py_backwards_packager import setup
@@ -163,7 +196,7 @@ except ImportError:
 ```
 
 By default all targets enabled, but you can limit them with:
- 
+
 ```python
 setup(...,
       py_backwards_targets=['2.7', '3.3'])
@@ -263,7 +296,7 @@ from ..utils.snippet import snippet, let, extend
 def my_snippet(class_name, class_body):
     class class_name:  # will be replaced with `class_name`
         extend(class_body)  # body of the class will be extended with `class_body`
-        
+
         def fn(self):
             let(x)  # x will be replaced everywhere with unique name, like `_py_backwards_x_1`
             x = 10
@@ -286,5 +319,6 @@ it contains such useful functions like `find`, `get_parent` and etc.
 * [tox-py-backwards](https://github.com/nvbn/tox-py-backwards)
 * [py-backwards-packager](https://github.com/nvbn/py-backwards-packager)
 * [pytest-docker-pexpect](https://github.com/nvbn/pytest-docker-pexpect)
+* [lib3to6](https://gitlab.com/mbarkhau/lib3to6)
 
 ## License MIT

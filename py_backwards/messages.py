@@ -53,7 +53,7 @@ def syntax_error(e: CompilationError) -> str:
         red=Fore.RED,
         e=e,
         reset=Style.RESET_ALL,
-        bright=Style.BRIGHT,
+        # bright=Style.BRIGHT,
         lines='\n'.join(lines))
 
 

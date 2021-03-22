@@ -1,4 +1,3 @@
-# type: ignore
 from ..utils.helpers import eager
 from .base import BaseImportRewrite
 

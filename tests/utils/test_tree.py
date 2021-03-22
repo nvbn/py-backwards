@@ -1,4 +1,4 @@
-from typed_ast import ast3 as ast
+from py_backwards import ast
 from astunparse import unparse
 from py_backwards.utils.snippet import snippet
 from py_backwards.utils.tree import (get_parent, get_node_position,

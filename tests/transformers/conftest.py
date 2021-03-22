@@ -1,6 +1,7 @@
 import pytest
 from types import ModuleType
-from typed_ast.ast3 import parse, dump
+from py_backwards import ast
+parse, dump = ast.parse, ast.dump
 from astunparse import unparse, dump as dump_pretty
 
 
